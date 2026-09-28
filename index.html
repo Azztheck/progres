@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#1c1c1c">
+  <title>Progrès — les trophées de ma vie</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header id="topbar">
+    <div class="brand">🏆 <span>Progrès</span></div>
+    <div id="xp" title="Expérience">
+      <div id="lvl">0</div>
+      <div class="xpbar"><div id="xpfill"></div></div>
+      <div id="xptext"></div>
+    </div>
+    <div class="actions">
+      <button id="btn-new-tab" class="mc" title="Créer un onglet">＋ Onglet</button>
+      <button id="btn-menu" class="mc" title="Journal, stats, sauvegarde">☰</button>
+    </div>
+  </header>
+
+  <nav id="tabs"></nav>
+
+  <main id="stage">
+    <div id="viewport">
+      <svg id="links"></svg>
+      <div id="nodes"></div>
+    </div>
+    <div id="tabinfo"></div>
+    <div id="zoom">
+      <button class="mc" data-z="1" title="Zoomer">+</button>
+      <button class="mc" data-z="-1" title="Dézoomer">−</button>
+      <button class="mc" data-z="0" title="Recentrer">⌖</button>
+    </div>
+  </main>
+
+  <div id="hover"></div>
+  <div id="toasts"></div>
+  <dialog id="modal"></dialog>
+
+  <script src="data/defaults.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

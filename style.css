@@ -1,0 +1,241 @@
+:root {
+  --panel: #c6c6c6;
+  --panel-hi: #ffffff;
+  --panel-lo: #555555;
+  --ink: #1e1e1e;
+  --gold: #e8b830;
+  --gold-hi: #ffe27a;
+  --gold-lo: #9a6a14;
+  --stone: #8b8b8b;
+  --stone-hi: #b8b8b8;
+  --stone-lo: #4f4f4f;
+  --purple: #c77dff;
+  --yellow: #ffff55;
+  --green: #80ff20;
+  --tab: #3d6b35;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; }
+body {
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: 20px;
+  color: var(--ink);
+  background: #1c1c1c;
+  display: flex;
+  flex-direction: column;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+button, input, textarea, select { font: inherit; }
+
+/* ---------- Boutons façon GUI Minecraft ---------- */
+.mc {
+  background: #8b8b8b;
+  color: #fff;
+  text-shadow: 2px 2px 0 #3f3f3f;
+  border: 2px solid #000;
+  box-shadow: inset 2px 2px 0 #c6c6c6, inset -2px -3px 0 #565656;
+  padding: 4px 12px;
+  cursor: pointer;
+  line-height: 1.1;
+}
+.mc:hover { background: #7e8fbf; box-shadow: inset 2px 2px 0 #b8c4e8, inset -2px -3px 0 #3e4a70; }
+.mc:active { transform: translateY(1px); }
+.mc.primary { background: #3f8f2f; box-shadow: inset 2px 2px 0 #7ccf5c, inset -2px -3px 0 #245a1a; }
+.mc.primary:hover { background: #4fa83c; }
+.mc.danger { background: #9a3030; box-shadow: inset 2px 2px 0 #d06060, inset -2px -3px 0 #5a1616; }
+
+/* ---------- Barre du haut ---------- */
+#topbar {
+  display: flex; align-items: center; gap: 14px;
+  padding: 6px 12px;
+  background: #2b2b2b;
+  border-bottom: 3px solid #000;
+  color: #fff;
+  z-index: 5;
+}
+.brand { font-size: 28px; text-shadow: 2px 2px 0 #000; white-space: nowrap; }
+#xp { flex: 1; display: flex; align-items: center; gap: 10px; min-width: 0; }
+#lvl {
+  color: var(--green); font-size: 30px; min-width: 34px; text-align: center;
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000;
+}
+.xpbar { flex: 1; max-width: 420px; height: 12px; background: #1a1a1a; border: 2px solid #000; }
+#xpfill { height: 100%; width: 0; background: linear-gradient(#b6ff5a, #5fc418); transition: width .6s; }
+#xptext { color: #aaa; white-space: nowrap; font-size: 18px; }
+.actions { display: flex; gap: 8px; }
+
+/* ---------- Onglets ---------- */
+#tabs {
+  display: flex; gap: 4px; padding: 6px 8px 0;
+  background: #2b2b2b;
+  overflow-x: auto; scrollbar-width: none;
+  z-index: 4;
+}
+#tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex: 0 0 auto;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 4px 12px 2px;
+  background: #6b6b6b;
+  border: 2px solid #000; border-bottom: none;
+  box-shadow: inset 2px 2px 0 #9a9a9a;
+  color: #eee; cursor: pointer;
+  position: relative; top: 3px;
+}
+.tab .t-ic { font-size: 24px; line-height: 1.1; }
+.tab .t-name { font-size: 17px; white-space: nowrap; }
+.tab .t-pct { display: block; height: 3px; width: 100%; background: #333; margin-top: 2px; }
+.tab .t-pct i { display: block; height: 100%; background: var(--gold); }
+.tab.active { background: var(--c); top: 0; padding-bottom: 5px; box-shadow: inset 2px 2px 0 rgba(255,255,255,.35); color: #fff; text-shadow: 2px 2px 0 #000; }
+
+/* ---------- Scène ---------- */
+#stage {
+  flex: 1; position: relative; overflow: hidden;
+  background-color: var(--tab);
+  background-image:
+    linear-gradient(rgba(0,0,0,.18) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(0,0,0,.18) 2px, transparent 2px),
+    radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size: 64px 64px, 64px 64px, 8px 8px;
+  border-top: 3px solid #000;
+  cursor: grab;
+  touch-action: none;
+}
+#stage.dragging { cursor: grabbing; }
+#stage::after { /* vignette */
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 120px rgba(0,0,0,.65);
+}
+#viewport { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+#links { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+#links .out { stroke: #000; stroke-width: 7; fill: none; stroke-linejoin: miter; }
+#links .in { stroke: #fff; stroke-width: 3; fill: none; }
+#links .in.done { stroke: var(--gold-hi); }
+#links .in.locked { stroke: #8a8a8a; }
+#links .dim { opacity: .35; }
+
+/* ---------- Nœuds ---------- */
+.node { position: absolute; width: 52px; height: 52px; cursor: pointer; }
+.node .frame {
+  position: relative; z-index: 1;
+  width: 52px; height: 52px;
+  display: grid; place-items: center;
+  background: var(--stone);
+  border: 3px solid var(--ink);
+  box-shadow: inset 3px 3px 0 var(--stone-hi), inset -3px -3px 0 var(--stone-lo);
+  font-size: 26px; line-height: 1;
+  transition: transform .12s;
+}
+.node:hover .frame { transform: scale(1.1); }
+.node.goal .frame { border-radius: 16px; }
+.node.challenge::before {
+  content: ''; position: absolute; z-index: 0;
+  left: 6px; top: 6px; width: 40px; height: 40px;
+  transform: rotate(45deg) scale(1.22);
+  background: var(--stone); border: 3px solid var(--ink);
+}
+.node.done .frame, .node.done.challenge::before {
+  background: var(--gold);
+  box-shadow: inset 3px 3px 0 var(--gold-hi), inset -3px -3px 0 var(--gold-lo);
+}
+.node.done.challenge::before { box-shadow: 0 0 18px 4px rgba(199,125,255,.7); }
+.node.locked { opacity: .85; }
+.node.locked .ic { filter: grayscale(.6); opacity: .75; }
+.node.hiddenn { opacity: .25; }
+.node.custom .frame::after {
+  content: ''; position: absolute; right: -4px; top: -4px; width: 9px; height: 9px;
+  background: #5ad; border: 2px solid #000;
+}
+.node .bar {
+  position: absolute; left: -4px; right: -4px; top: 58px; height: 8px;
+  background: #222; border: 2px solid #000; z-index: 2;
+}
+.node .bar i { display: block; height: 100%; background: var(--green); }
+
+/* ---------- Infobulle façon Minecraft ---------- */
+#hover {
+  position: fixed; z-index: 20; pointer-events: none; display: none;
+  max-width: 320px; color: #fff; text-shadow: 2px 2px 0 #3f3f3f;
+}
+#hover .h-title { padding: 4px 10px; background: #1f5e8c; border: 2px solid #000; box-shadow: inset 0 2px 0 #3a86c0; }
+#hover.done .h-title { background: #b7862a; box-shadow: inset 0 2px 0 #e8b95a; }
+#hover .h-desc { padding: 4px 10px 6px; background: #1a1a1a; border: 2px solid #000; border-top: none; color: #55ff55; font-size: 18px; }
+#hover.challenge .h-desc { color: var(--purple); }
+#hover .h-desc small { color: #aaa; display: block; }
+
+/* ---------- Infos onglet ---------- */
+#tabinfo {
+  position: absolute; left: 12px; bottom: 12px; z-index: 3;
+  color: #fff; text-shadow: 2px 2px 0 #000; pointer-events: none;
+}
+#tabinfo b { font-size: 30px; font-weight: normal; display: block; }
+#zoom { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 6px; z-index: 3; }
+#zoom .mc { width: 40px; height: 40px; padding: 0; font-size: 24px; }
+
+/* ---------- Toasts ---------- */
+#toasts { position: fixed; top: 70px; right: 12px; z-index: 30; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast {
+  display: flex; align-items: center; gap: 12px;
+  width: 320px; padding: 8px 12px;
+  background: #212121; border: 3px solid #000; border-radius: 4px;
+  box-shadow: inset 0 0 0 2px #555, 0 6px 20px rgba(0,0,0,.5);
+  color: #fff; animation: toastIn .35s ease-out, toastOut .4s ease-in 4.2s forwards;
+}
+.toast .t-ic { font-size: 34px; }
+.toast .t-h { color: var(--yellow); }
+.toast.challenge .t-h { color: var(--purple); }
+.toast .t-t { font-size: 22px; }
+@keyframes toastIn { from { transform: translateX(120%); } }
+@keyframes toastOut { to { transform: translateX(120%); opacity: 0; } }
+
+/* ---------- Modale ---------- */
+dialog {
+  padding: 0; border: 3px solid #000; max-width: min(520px, 94vw); width: 100%;
+  background: var(--panel);
+  box-shadow: inset 3px 3px 0 var(--panel-hi), inset -3px -3px 0 var(--panel-lo);
+  user-select: text;
+}
+dialog::backdrop { background: rgba(0,0,0,.6); }
+.card { padding: 16px 18px; max-height: 88vh; overflow-y: auto; }
+.card .head { display: flex; gap: 14px; align-items: center; }
+.card .head .node { position: relative; flex: 0 0 auto; margin: 6px; }
+.card .head .node:hover .frame { transform: none; }
+.card h2 { margin: 0; font-weight: normal; font-size: 30px; line-height: 1; }
+.card .kind { color: #444; font-size: 18px; }
+.card .kind.challenge { color: #7a2fb0; }
+.card .crumbs { color: #555; font-size: 16px; }
+.card .x { margin-left: auto; align-self: flex-start; }
+.card .desc { font-size: 22px; margin: 12px 0; }
+.card label { display: block; margin: 8px 0; }
+.card input[type=text], .card input[type=number], .card input[type=date], .card textarea, .card select {
+  width: 100%; padding: 4px 8px; background: #000; color: #fff; border: 2px solid #a0a0a0;
+}
+.card input[type=date] { width: auto; color-scheme: dark; }
+.card textarea { min-height: 70px; resize: vertical; }
+.card .btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.card .ok { color: #2d6e1f; }
+.card .counter { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
+.card .counter input { width: 110px !important; text-align: center; }
+.card .counter .bigbar { flex: 1; height: 14px; background: #222; border: 2px solid #000; }
+.card .counter .bigbar i { display: block; height: 100%; background: var(--green); }
+.card .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.card .picks { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 4px; }
+.card .picks span { cursor: pointer; font-size: 22px; padding: 2px; }
+.card .picks span:hover { background: #fff8; }
+.card h3 { font-weight: normal; font-size: 24px; margin: 16px 0 6px; border-bottom: 2px solid #888; }
+.card .journal { list-style: none; padding: 0; margin: 0; max-height: 260px; overflow-y: auto; }
+.card .journal li { display: flex; gap: 8px; align-items: center; padding: 2px 0; cursor: pointer; }
+.card .journal li:hover { background: #fff5; }
+.card .journal .d { color: #555; margin-left: auto; font-size: 17px; white-space: nowrap; }
+.card .stat { display: flex; align-items: center; gap: 8px; }
+.card .stat .bigbar { flex: 1; height: 10px; background: #333; border: 2px solid #000; }
+.card .stat .bigbar i { display: block; height: 100%; background: var(--gold); }
+.card .muted { color: #555; font-size: 17px; }
+
+@media (max-width: 640px) {
+  .brand span, #xptext, .tab .t-name { display: none; }
+  #btn-new-tab { padding: 4px 8px; }
+  .toast { width: 270px; }
+}
