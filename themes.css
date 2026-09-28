@@ -211,3 +211,18 @@ html[data-theme] .node.avail { animation: pulse 2.4s ease-in-out infinite; }
   color: var(--title); text-shadow: 2px 2px 0 var(--outline), -1px -1px 0 var(--outline);
 }
 html[data-theme] .node.locked .label { opacity: 1; }
+
+/* ---------- Hauts faits pré-remplis, à vérifier ---------- */
+.node.unverified::after {
+  content: '?'; position: absolute; right: -9px; top: -9px; z-index: 4;
+  width: 18px; height: 18px; display: grid; place-items: center;
+  font: 16px/1 'VT323', monospace; color: #14112b;
+  background: var(--accent2); box-shadow: 0 0 0 2px var(--outline), 0 0 8px var(--accent2);
+}
+.card .verify {
+  margin: 12px 0; padding: 10px 12px; background: var(--panel2);
+  box-shadow: 0 0 0 3px var(--accent2); color: var(--panel-ink);
+}
+.card .verify .btns { margin-top: 8px; }
+.card .verify-list li { gap: 6px; }
+.card .verify-list .mc { padding: 0 8px; margin: 3px; }

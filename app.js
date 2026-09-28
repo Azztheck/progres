@@ -31,6 +31,8 @@ function blank() {
     hidden: {},     // id -> true (branche "pas pour moi")
     custom: [],     // nœuds perso { id, tab, parent, icon, title, desc, type, target, unit }
     customTabs: [{ id: 'mes', title: 'Mes quêtes', icon: '⭐', color: '#8a5cff', root: 'mes.root' }],
+    unverified: {}, // id -> true : pré-rempli, pas encore confirmé
+    preset: 0,      // version du lot pré-rempli déjà appliqué
     showHidden: false,
     theme: 'arcanes',
     tab: null,
@@ -67,6 +69,23 @@ function build() {
   for (const c of st.custom) if (nodes[c.parent]) nodes[c.parent].children.push(c.id);
   if (!tabs.some(t => t.id === st.tab)) st.tab = tabs[0].id;
 }
+
+function applyPreset() {
+  const P = window.PRESET;
+  if (!P || (st.preset || 0) >= P.version) return 0;
+  let n = 0;
+  for (const [id, d] of Object.entries(P.done)) {
+    if (!nodes[id] || st.done[id]) continue;
+    st.done[id] = d; n++;
+    if (P.unverified.includes(id)) st.unverified[id] = true;
+  }
+  for (const [id, v] of Object.entries(P.progress || {})) if (nodes[id]) st.progress[id] = Math.max(st.progress[id] || 0, v);
+  for (const [id, t] of Object.entries(P.notes || {})) if (nodes[id] && !st.notes[id]) st.notes[id] = t;
+  st.preset = P.version;
+  save();
+  return n;
+}
+const toVerify = () => Object.keys(st.unverified).filter(id => nodes[id] && st.done[id]);
 
 const tabOf = id => tabs.find(t => t.id === id);
 function isHidden(id) {
@@ -169,7 +188,7 @@ function nodeState(n) {
   return 'locked';
 }
 function nodeHTML(n, p) {
-  const cls = [n.type, nodeState(n), n.custom ? 'custom' : '', isHidden(n.id) ? 'hiddenn' : ''].join(' ');
+  const cls = [n.type, nodeState(n), n.custom ? 'custom' : '', isHidden(n.id) ? 'hiddenn' : '', st.unverified[n.id] && st.done[n.id] ? 'unverified' : ''].join(' ');
   const style = p ? `left:${p.x}px;top:${p.y}px` : '';
   let bar = '';
   if (n.target && !st.done[n.id]) {
@@ -266,7 +285,7 @@ $('#nodes').addEventListener('mouseover', e => {
   const el = e.target.closest('.node'); if (!el || $('#stage').classList.contains('dragging')) return;
   const n = nodes[el.dataset.id], done = st.done[n.id];
   let extra = '';
-  if (done) extra = `<small>Débloqué le ${fmtDate(done)}</small>`;
+  if (done) extra = `<small>${st.unverified[n.id] ? '🔮 Pré-rempli, à vérifier · ' : ''}Débloqué le ${fmtDate(done)}</small>`;
   else if (n.target) extra = `<small>${st.progress[n.id] || 0} / ${n.target} ${esc(n.unit)}</small>`;
   hover.className = `${n.type} ${done ? 'done' : ''}`;
   hover.innerHTML = `<div class="h-title">${esc(n.title)}</div><div class="h-desc">${esc(n.desc)}${extra}</div>`;
@@ -281,6 +300,7 @@ $('#nodes').addEventListener('mouseout', e => { if (e.target.closest('.node')) h
 // ---------- Actions ----------
 function setDone(id, on) {
   const n = nodes[id];
+  delete st.unverified[id];
   if (on) {
     if (st.done[id]) return;
     st.done[id] = today();
@@ -380,6 +400,10 @@ function openNode(id) {
       </div>
       <button type="button" class="mc x" data-close>✕</button>
     </div>
+    ${done && st.unverified[id] ? `
+      <div class="verify">🔮 Pré-rempli d'après ton Instagram et nos échanges. C'est juste ?
+        <div class="btns"><button type="button" id="b-yes" class="mc primary">✔ Oui, validé</button><button type="button" id="b-no" class="mc danger">✖ Non, annuler</button></div>
+      </div>` : ''}
     <p class="desc">${esc(n.desc)}</p>
     ${n.target ? `
       <div class="counter">
@@ -399,6 +423,11 @@ function openNode(id) {
                  : `<button type="button" id="b-hide" class="mc">${st.hidden[id] ? '👁 Réafficher' : '🚫 Pas pour moi'}</button>`}
     </div>`,
   m => {
+    const yes = m.querySelector('#b-yes');
+    if (yes) {
+      yes.onclick = () => { delete st.unverified[id]; save(); render(); openNode(id); };
+      m.querySelector('#b-no').onclick = () => { setDone(id, false); openNode(id); };
+    }
     m.querySelector('#b-toggle').onclick = () => { if (done) { setDone(id, false); openNode(id); } else { modal.close(); setDone(id, true); } };
     m.querySelector('#b-add').onclick = () => openForm({ parent: id, tab: n.tab });
     m.querySelector('#f-note').oninput = e => { const v = e.target.value.trim(); if (v) st.notes[id] = e.target.value; else delete st.notes[id]; save(); };
@@ -516,8 +545,15 @@ function openMenu() {
     const ns = tabNodes(t.id), d = ns.filter(n => st.done[n.id]).length;
     return `<div class="stat">${esc(t.icon)} <span style="width:110px">${esc(t.title)}</span><div class="bigbar"><i style="width:${ns.length ? d / ns.length * 100 : 0}%"></i></div><span>${d}/${ns.length}</span></div>`;
   }).join('');
+  const tv = toVerify();
   show(`
     <div class="head"><h2>☰ Menu</h2><button type="button" class="mc x" data-close>✕</button></div>
+    ${tv.length ? `<h3>🔮 À vérifier (${tv.length})</h3>
+    <p class="muted">Pré-remplis pour toi. ✔ si c'est juste, ✖ si c'est une erreur.</p>
+    <ul class="journal verify-list">${tv.map(id => `<li data-id="${esc(id)}">${esc(nodes[id].icon)} ${esc(nodes[id].title)}
+      <span class="d">${esc(tabOf(nodes[id].tab).title)}</span>
+      <button type="button" class="mc primary" data-yes>✔</button><button type="button" class="mc danger" data-no>✖</button></li>`).join('')}</ul>
+    <div class="btns"><button type="button" id="b-allyes" class="mc">✔ Tout valider</button></div>` : ''}
     <h3>📜 Journal</h3>
     ${journal.length ? `<ul class="journal">${journal.map(([id, d]) => `<li data-id="${esc(id)}">${esc(nodes[id].icon)} ${esc(nodes[id].title)}<span class="d">${fmtDate(d)}</span></li>`).join('')}</ul>`
                      : '<p class="muted">Rien encore… va débloquer ton premier progrès !</p>'}
@@ -534,7 +570,19 @@ function openMenu() {
       <input type="file" id="f-file" accept=".json,application/json" hidden>
     </div>`,
   m => {
-    m.querySelector('.journal')?.addEventListener('click', e => {
+    m.querySelector('.verify-list')?.addEventListener('click', e => {
+      const li = e.target.closest('li'); if (!li) return;
+      const id = li.dataset.id;
+      if (e.target.closest('[data-yes]')) { delete st.unverified[id]; save(); render(); openMenu(); }
+      else if (e.target.closest('[data-no]')) { setDone(id, false); openMenu(); }
+      else { st.tab = nodes[id].tab; save(); render(); centerView(); openNode(id); }
+    });
+    const allyes = m.querySelector('#b-allyes');
+    if (allyes) allyes.onclick = () => {
+      if (!confirm(`Valider les ${tv.length} hauts faits pré-remplis ?`)) return;
+      st.unverified = {}; save(); render(); openMenu();
+    };
+    m.querySelector('.journal:not(.verify-list)')?.addEventListener('click', e => {
       const li = e.target.closest('li'); if (!li) return;
       st.tab = nodes[li.dataset.id].tab; save(); render(); centerView(); openNode(li.dataset.id);
     });
@@ -572,7 +620,7 @@ function openMenu() {
       if (!confirm('Effacer TOUTE ta progression et tes objectifs perso ?')) return;
       if (!confirm('Vraiment ? (pense à exporter avant)')) return;
       localStorage.removeItem(KEY); st = load();
-      save(); build(); render(); centerView(); modal.close();
+      build(); applyPreset(); save(); render(); centerView(); modal.close();
     };
   });
 }
@@ -587,5 +635,7 @@ $('#btn-new-tab').onclick = openTabForm;
 window.addEventListener('resize', () => centerView());
 
 build();
+const prefilled = applyPreset();
 render();
 centerView();
+if (prefilled) setTimeout(() => toast({ icon: '🔮', type: 'challenge', title: `${prefilled} hauts faits pré-remplis — ☰ pour vérifier` }, 'L\'Oracle a parlé'), 800);

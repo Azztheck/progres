@@ -24,7 +24,9 @@ window.DEFAULT_TABS = [
             { id: 'pk.rail', icon: '🛤️', title: 'Funambule', desc: 'Précision sur une rambarde.', type: 'goal', children: [
               { id: 'pk.bigprec', icon: '📏', title: 'Grand saut', desc: 'Précision de plus de 3 m.', type: 'challenge' },
             ] },
-            { id: 'pk.roofgap', icon: '🏚️', title: 'Roof gap', desc: 'Sauter d\'un toit à un autre.', type: 'goal' },
+            { id: 'pk.roofgap', icon: '🏚️', title: 'Roof gap', desc: 'Sauter d\'un toit à un autre.', type: 'goal', children: [
+              { id: 'pk.roofgap3', icon: '🦅', title: 'Grand roof gap', desc: 'Roof gap de plus de 3 m.', type: 'challenge' },
+            ] },
           ] },
           { id: 'pk.vault', icon: '🐒', title: 'Passement', desc: 'Maîtriser speed vault et lazy vault.', children: [
             { id: 'pk.kong', icon: '🦍', title: 'Saut de chat', desc: 'Kong vault propre.', children: [
@@ -43,9 +45,13 @@ window.DEFAULT_TABS = [
             ] },
           ] },
           { id: 'pk.jam', icon: '🤝', title: 'Jam', desc: 'Participer à une jam avec d\'autres crews.', children: [
-            { id: 'pk.jam3', icon: '🎪', title: 'Habitué des jams', desc: 'Participer à 3 jams.', type: 'goal', target: 3, unit: 'jams' },
+            { id: 'pk.jam3', icon: '🎪', title: 'Habitué des jams', desc: 'Participer à 3 jams.', type: 'goal', target: 3, unit: 'jams', children: [
+              { id: 'pk.jamorga', icon: '📣', title: 'Organisateur de jam', desc: 'Organiser ta propre jam.', type: 'challenge' },
+            ] },
             { id: 'pk.teach', icon: '👨‍🏫', title: 'Transmettre', desc: 'Apprendre un mouvement à un débutant.', type: 'goal' },
-            { id: 'pk.abroad', icon: '✈️', title: 'Spot étranger', desc: 'S\'entraîner sur un spot à l\'étranger.', type: 'goal' },
+            { id: 'pk.abroad', icon: '✈️', title: 'Spot étranger', desc: 'S\'entraîner sur un spot à l\'étranger.', type: 'goal', children: [
+              { id: 'pk.abroad5', icon: '🌍', title: 'Traceur international', desc: 'S\'entraîner dans 5 pays différents.', type: 'challenge', target: 5, unit: 'pays' },
+            ] },
           ] },
         ] },
 
@@ -64,17 +70,23 @@ window.DEFAULT_TABS = [
           { id: 'ac.tricking', icon: '🥋', title: 'Tricking', desc: 'Enchaîner 3 figures de tricking en salle.', type: 'goal', children: [
             { id: 'ac.btwist', icon: '🦋', title: 'B-twist', desc: 'Butterfly twist propre.', type: 'goal' },
             { id: 'ac.full', icon: '🌀', title: 'Vrille', desc: 'Salto arrière avec une vrille complète (full).', type: 'challenge', children: [
-              { id: 'ac.double', icon: '💫', title: 'Double salto', desc: 'Double salto arrière.', type: 'challenge' },
+              { id: 'ac.double', icon: '💫', title: 'Double salto', desc: 'Double salto arrière.', type: 'challenge', children: [
+                { id: 'ac.dfull', icon: '🌠', title: 'Double full', desc: 'Salto arrière avec deux vrilles.', type: 'challenge' },
+              ] },
             ] },
           ] },
         ] },
 
         // ---------- Trekking ----------
         { id: 'tk.root', icon: '🎒', title: 'Trekking', desc: 'Un trek d\'au moins 2 jours, sac sur le dos.', children: [
-          { id: 'tk.alti', icon: '🏔️', title: 'Trek d\'altitude', desc: 'Trek au-dessus de 3000 m.', type: 'goal' },
+          { id: 'tk.alti', icon: '🏔️', title: 'Trek d\'altitude', desc: 'Trek au-dessus de 3000 m.', type: 'goal', children: [
+            { id: 'tk.ebc', icon: '🏕️', title: 'Camp de base', desc: 'Rejoindre le camp de base de l\'Everest (5364 m).', type: 'challenge' },
+          ] },
           { id: 'tk.jungle', icon: '🌴', title: 'Jungle', desc: 'Trek en immersion dans la jungle.', type: 'goal' },
           { id: 'tk.desert', icon: '🏜️', title: 'Désert', desc: 'Trek dans le désert.', type: 'challenge' },
-          { id: 'tk.100', icon: '🥾', title: 'Semelles usées', desc: 'Cumuler 100 km de trek.', type: 'goal', target: 100, unit: 'km' },
+          { id: 'tk.100', icon: '🥾', title: 'Semelles usées', desc: 'Cumuler 100 km de trek.', type: 'goal', target: 100, unit: 'km', children: [
+            { id: 'tk.1000', icon: '👣', title: 'Mille kilomètres à pied', desc: 'Cumuler 1000 km de trek.', type: 'challenge', target: 1000, unit: 'km' },
+          ] },
         ] },
 
         // ---------- Course ----------
@@ -139,12 +151,18 @@ window.DEFAULT_TABS = [
         // ---------- Randonnée ----------
         { id: 'mo.rando', icon: '🥾', title: 'Randonnée', desc: 'Une vraie rando de plus de 10 km.', children: [
           { id: 'mo.dplus', icon: '📈', title: 'Mille mètres', desc: '1000 m de dénivelé positif dans la journée.', children: [
-            { id: 'mo.dplus2', icon: '🚠', title: 'Cuisses d\'acier', desc: '2000 m de dénivelé positif dans la journée.', type: 'challenge' },
+            { id: 'mo.dplus2', icon: '🚠', title: 'Cuisses d\'acier', desc: '2000 m de dénivelé positif dans la journée.', type: 'goal', children: [
+              { id: 'mo.dplus5', icon: '⛰️', title: 'Cinq mille', desc: '5000 m de dénivelé positif en une seule sortie.', type: 'challenge', children: [
+                { id: 'mo.dplus10', icon: '🌋', title: 'Dix mille', desc: '10 000 m de dénivelé positif en une seule sortie.', type: 'challenge' },
+              ] },
+            ] },
           ] },
           { id: 'av.gr', icon: '🗺️', title: 'Itinérance', desc: 'Randonnée de 5 jours ou plus en autonomie.', type: 'goal', children: [
             { id: 'av.long', icon: '🧭', title: 'Le grand chemin', desc: 'Faire un GR complet ou un chemin mythique (Compostelle, GR20…).', type: 'challenge' },
           ] },
-          { id: 'mo.massifs', icon: '🗻', title: 'Explorateur de massifs', desc: 'Randonner dans 5 massifs différents (Chartreuse, Belledonne, Vercors, Atlas…).', type: 'goal', target: 5, unit: 'massifs' },
+          { id: 'mo.massifs', icon: '🗻', title: 'Explorateur de massifs', desc: 'Randonner dans 5 massifs différents (Chartreuse, Belledonne, Vercors, Atlas…).', type: 'goal', target: 5, unit: 'massifs', children: [
+            { id: 'mo.massifs15', icon: '🗺️', title: 'Cartographe', desc: 'Randonner dans 15 massifs différents.', type: 'challenge', target: 15, unit: 'massifs' },
+          ] },
           { id: 'av.sunrise', icon: '🌄', title: 'Premier rayon', desc: 'Voir le lever du soleil depuis un sommet.', type: 'goal' },
           { id: 'av.stars', icon: '🌌', title: 'Belle étoile', desc: 'Dormir dehors, sans tente.', children: [
             { id: 'av.bivouac', icon: '⛺', title: 'Bivouac', desc: 'Bivouac en montagne.' },
@@ -159,7 +177,13 @@ window.DEFAULT_TABS = [
             ] },
           ] },
           { id: 'av.summit3k', icon: '☁️', title: 'Tête dans les nuages', desc: 'Atteindre un sommet de plus de 3000 m.', type: 'goal', children: [
-            { id: 'av.summit4k', icon: '🏔️', title: 'Quatre mille', desc: 'Gravir un sommet de plus de 4000 m.', type: 'challenge' },
+            { id: 'av.summit4k', icon: '🏔️', title: 'Quatre mille', desc: 'Gravir un sommet de plus de 4000 m.', type: 'challenge', children: [
+              { id: 'mo.5k', icon: '🦒', title: 'Cinq mille', desc: 'Gravir un sommet de plus de 5000 m (Kilimandjaro, Elbrouz…).', type: 'challenge', children: [
+                { id: 'mo.6k', icon: '🦙', title: 'Six mille', desc: 'Gravir un sommet de plus de 6000 m (Aconcagua, pics himalayens…).', type: 'challenge', children: [
+                  { id: 'mo.7k', icon: '🐉', title: 'Sept mille', desc: 'Gravir un sommet de plus de 7000 m.', type: 'challenge' },
+                ] },
+              ] },
+            ] },
           ] },
           { id: 'mo.rappel', icon: '🧗', title: 'Rappel', desc: 'Descendre en rappel en autonomie.' },
           { id: 'mo.lead', icon: '🧭', title: 'Premier de cordée', desc: 'Mener une course d\'alpinisme en autonomie.', type: 'challenge' },
@@ -195,24 +219,35 @@ window.DEFAULT_TABS = [
         // ---------- Autostop ----------
         { id: 'vo.stop', icon: '👍', title: 'Autostop', desc: 'Faire un premier trajet en stop.', children: [
           { id: 'vo.stop1k', icon: '🛣️', title: 'Pouce levé', desc: 'Cumuler 1000 km en stop.', type: 'goal', target: 1000, unit: 'km', children: [
-            { id: 'vo.stop10k', icon: '🌍', title: 'Autostoppeur légendaire', desc: 'Cumuler 10 000 km en stop.', type: 'challenge', target: 10000, unit: 'km' },
+            { id: 'vo.stop10k', icon: '🌍', title: 'Autostoppeur légendaire', desc: 'Cumuler 10 000 km en stop.', type: 'challenge', target: 10000, unit: 'km', children: [
+              { id: 'vo.shanghai', icon: '🏯', title: 'Route de la Soie', desc: 'Rejoindre Shanghai en stop en partant de France.', type: 'challenge' },
+              { id: 'vo.stop25k', icon: '🌏', title: 'Tour du monde au pouce', desc: 'Cumuler 25 000 km en stop.', type: 'challenge', target: 25000, unit: 'km' },
+            ] },
           ] },
-          { id: 'vo.cars', icon: '🚗', title: 'Cent conducteurs', desc: 'Monter dans 100 voitures différentes en stop.', type: 'goal', target: 100, unit: 'voitures' },
+          { id: 'vo.cars', icon: '🚗', title: 'Cent conducteurs', desc: 'Monter dans 100 voitures différentes en stop.', type: 'goal', target: 100, unit: 'voitures', children: [
+            { id: 'vo.cars500', icon: '🚚', title: 'Cinq cents conducteurs', desc: 'Monter dans 500 voitures différentes en stop.', type: 'challenge', target: 500, unit: 'voitures' },
+          ] },
           { id: 'vo.border', icon: '🛃', title: 'Sans frontières', desc: 'Passer une frontière en stop.' },
         ] },
 
         // ---------- Pays ----------
         { id: 'av.country', icon: '🛂', title: 'Pays', desc: 'Visiter un autre pays.', children: [
           { id: 'av.c10', icon: '🌐', title: 'Globe-trotter', desc: 'Visiter 10 pays.', type: 'goal', target: 10, unit: 'pays', children: [
-            { id: 'av.c30', icon: '🗾', title: 'Citoyen du monde', desc: 'Visiter 30 pays.', type: 'challenge', target: 30, unit: 'pays' },
+            { id: 'av.c30', icon: '🗾', title: 'Citoyen du monde', desc: 'Visiter 30 pays.', type: 'challenge', target: 30, unit: 'pays', children: [
+              { id: 'av.c50', icon: '🧳', title: 'Cinquante drapeaux', desc: 'Visiter 50 pays.', type: 'challenge', target: 50, unit: 'pays' },
+            ] },
           ] },
-          { id: 'av.continent', icon: '🌏', title: 'Autre continent', desc: 'Mettre les pieds sur un autre continent.', type: 'goal' },
+          { id: 'av.continent', icon: '🌏', title: 'Autre continent', desc: 'Mettre les pieds sur un autre continent.', type: 'goal', children: [
+            { id: 'av.allcont', icon: '🗺️', title: 'Six continents', desc: 'Poser le pied sur les 6 continents habités.', type: 'challenge', target: 6, unit: 'continents' },
+          ] },
           { id: 'av.solo', icon: '🧍', title: 'En solo', desc: 'Voyager seul au moins une semaine.', type: 'goal' },
         ] },
 
         // ---------- Hospitalité ----------
         { id: 'vo.host', icon: '🏡', title: 'Hospitalité', desc: 'Dormir chez l\'habitant.', children: [
-          { id: 'vo.host10', icon: '☕', title: 'Accueilli partout', desc: 'Être hébergé 10 fois chez l\'habitant.', type: 'goal', target: 10, unit: 'accueils' },
+          { id: 'vo.host10', icon: '☕', title: 'Accueilli partout', desc: 'Être hébergé 10 fois chez l\'habitant.', type: 'goal', target: 10, unit: 'accueils', children: [
+            { id: 'vo.host50', icon: '🏘️', title: 'Mille portes', desc: 'Être hébergé 50 fois chez l\'habitant.', type: 'challenge', target: 50, unit: 'accueils' },
+          ] },
           { id: 'vo.welcome', icon: '🚪', title: 'Porte ouverte', desc: 'Accueillir chez toi des voyageurs que tu ne connaissais pas.', type: 'goal' },
         ] },
 
@@ -300,9 +335,13 @@ window.DEFAULT_TABS = [
 
         // ---------- Compagnie ----------
         { id: 'sc.cie', icon: '🦎', title: 'Compagnie', desc: 'Intégrer une compagnie.', type: 'goal', children: [
-          { id: 'sc.creation', icon: '🧩', title: 'Création', desc: 'Participer à la création d\'un spectacle de A à Z.', type: 'goal' },
+          { id: 'sc.creation', icon: '🧩', title: 'Création', desc: 'Participer à la création d\'un spectacle de A à Z.', type: 'goal', children: [
+            { id: 'sc.own', icon: '👑', title: 'Ton spectacle', desc: 'Créer et porter ton propre spectacle (solo ou ta compagnie).', type: 'challenge' },
+          ] },
+          { id: 'sc.abroad', icon: '🌐', title: 'Jouer à l\'étranger', desc: 'Jouer un spectacle à l\'étranger.', type: 'goal' },
           { id: 'sc.paid', icon: '💶', title: 'Cachet', desc: 'Être payé pour un spectacle.', type: 'goal', children: [
             { id: 'sc.intermittent', icon: '📜', title: 'Intermittent', desc: 'Obtenir le statut d\'intermittent du spectacle.', type: 'challenge' },
+            { id: 'sc.100', icon: '💯', title: 'Cent représentations', desc: 'Jouer 100 représentations.', type: 'challenge', target: 100, unit: 'dates' },
           ] },
         ] },
 
@@ -326,8 +365,12 @@ window.DEFAULT_TABS = [
       id: 'cr.music', icon: '🎸', title: 'Mélomane', desc: 'Commencer un instrument.',
       children: [
         { id: 'cr.song', icon: '🎶', title: 'Un morceau entier', desc: 'Jouer un morceau en entier sans te tromper.', type: 'goal', children: [
-          { id: 'cr.live', icon: '🎤', title: 'Sur scène', desc: 'Jouer devant un public.', type: 'challenge' },
-          { id: 'mu.record', icon: '🎙️', title: 'Enregistré', desc: 'Enregistrer un morceau proprement.', type: 'goal' },
+          { id: 'cr.live', icon: '🎤', title: 'Sur scène', desc: 'Jouer devant un public.', type: 'goal', children: [
+            { id: 'mu.concert', icon: '🎟️', title: 'Concert', desc: 'Donner un concert d\'une heure.', type: 'challenge' },
+          ] },
+          { id: 'mu.record', icon: '🎙️', title: 'Enregistré', desc: 'Enregistrer un morceau proprement.', type: 'goal', children: [
+            { id: 'mu.ep', icon: '💿', title: 'EP', desc: 'Sortir un EP (au moins 4 morceaux).', type: 'challenge' },
+          ] },
         ] },
         { id: 'mu.duo', icon: '🎼', title: 'Harmonies', desc: 'Chanter ou jouer à deux voix en harmonie.', type: 'goal' },
         { id: 'mu.share', icon: '🌍', title: 'Langage universel', desc: 'Faire de la musique avec des gens rencontrés en voyage.', type: 'goal' },
