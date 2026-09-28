@@ -202,3 +202,12 @@ html[data-theme] .node.avail { animation: pulse 2.4s ease-in-out infinite; }
   html[data-theme] .xpbar { min-width: 40px; }
   html[data-theme] #toasts { right: 50%; transform: translateX(50%); }
 }
+
+/* ---------- Nom des sous-catégories (branches de la racine) ---------- */
+.node .label {
+  position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  white-space: nowrap; pointer-events: none; z-index: 3;
+  font-family: 'Jacquard 24', serif; font-size: 22px; line-height: 1;
+  color: var(--title); text-shadow: 2px 2px 0 var(--outline), -1px -1px 0 var(--outline);
+}
+html[data-theme] .node.locked .label { opacity: 1; }

@@ -133,7 +133,7 @@ function renderTree() {
     let y;
     if (!kids.length) y = row++ * ROWH;
     else { const ys = kids.map(k => lay(k, d + 1)); y = (ys[0] + ys[ys.length - 1]) / 2; }
-    pos[id] = { x: d * COLW, y };
+    pos[id] = { x: d * COLW, y, d };
     return y;
   };
   if (nodes[t.root]) lay(t.root, 0);
@@ -176,7 +176,9 @@ function nodeHTML(n, p) {
     const v = Math.min(1, (st.progress[n.id] || 0) / n.target);
     bar = `<div class="bar"><i style="width:${v * 100}%"></i></div>`;
   }
-  return `<div class="node ${cls}" data-id="${esc(n.id)}" style="${style}"><div class="frame"><span class="ic">${esc(n.icon)}</span></div>${bar}</div>`;
+  // les branches qui partent de la racine sont les sous-catégories : on affiche leur nom
+  const label = p && p.d === 1 ? `<div class="label">${esc(n.title)}</div>` : '';
+  return `<div class="node ${cls}" data-id="${esc(n.id)}" style="${style}">${label}<div class="frame"><span class="ic">${esc(n.icon)}</span></div>${bar}</div>`;
 }
 
 // ---------- Vue : pan / zoom ----------
@@ -189,9 +191,11 @@ function centerView() {
   const stage = $('#stage'), W = stage.clientWidth, H = stage.clientHeight - 60; // 60 : place pour l'info en bas
   const h = Math.max(...Object.values(pos).map(p => p.y)) + S + 14;
   const w = Math.max(...Object.values(pos).map(p => p.x)) + S;
-  view.s = Math.max(.45, Math.min(1, (H - 20) / h, (W - 60) / w));
+  // on ne dézoome pas en dessous d'un seuil lisible : un grand arbre se parcourt en glissant
+  view.s = Math.max(.6, Math.min(1, (H - 20) / h, (W - 60) / w));
   view.x = Math.max(24, (W - w * view.s) / 2);
-  view.y = h * view.s > H - 20 ? 20 : (H - h * view.s) / 2;
+  const r = pos[tabOf(st.tab).root];
+  view.y = h * view.s > H - 20 ? H / 2 - (r.y + S / 2) * view.s : (H - h * view.s) / 2;
   applyView();
 }
 function zoomAt(f, cx, cy) {
@@ -550,8 +554,17 @@ function openMenu() {
       try {
         const data = JSON.parse(await file.files[0].text());
         if (typeof data !== 'object' || !data.done) throw new Error('format');
-        if (!confirm('Remplacer ta progression actuelle par ce fichier ?')) return;
-        st = Object.assign(blank(), data);
+        if (data.merge) {
+          // fichier partiel (ex. hauts faits préparés à l'avance) : on ajoute sans rien écraser
+          const n = Object.keys(data.done).filter(id => !st.done[id]).length;
+          if (!confirm(`Ajouter ${n} haut(s) fait(s) à ta progression ?`)) return;
+          for (const [id, d] of Object.entries(data.done)) if (!st.done[id]) st.done[id] = d;
+          for (const [id, v] of Object.entries(data.progress || {})) st.progress[id] = Math.max(st.progress[id] || 0, v);
+          for (const [id, t] of Object.entries(data.notes || {})) if (!st.notes[id]) st.notes[id] = t;
+        } else {
+          if (!confirm('Remplacer ta progression actuelle par ce fichier ?')) return;
+          st = Object.assign(blank(), data);
+        }
         save(); build(); render(); centerView(); modal.close();
       } catch (e) { alert('Fichier invalide.'); }
     };
