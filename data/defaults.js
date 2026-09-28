@@ -2,7 +2,8 @@
 // Organisation : un onglet = une grande catégorie ; les branches qui partent de la racine
 // = les sous-catégories (ex. Montagne → Randonnée, Alpinisme, Escalade…).
 //
-// Chaque nœud : { id, icon, title, desc, type?, target?, unit?, children? }
+// Chaque nœud : { id, icon, title, desc, type?, target?, unit?, hub?, children? }
+//   hub    : affiche le nom du nœud dans l'arbre (les branches de la racine l'ont d'office)
 //   type   : 'task' (Rune, 10) | 'goal' (Sceau, 25) | 'challenge' (Relique, 50)
 //   target : si présent, le nœud a un compteur (ex. 100 km) et se débloque tout seul à l'objectif
 // Les ids doivent être uniques et NE DOIVENT PAS changer (c'est la clé de ta progression sauvegardée).
@@ -24,9 +25,7 @@ window.DEFAULT_TABS = [
             { id: 'pk.rail', icon: '🛤️', title: 'Funambule', desc: 'Précision sur une rambarde.', type: 'goal', children: [
               { id: 'pk.bigprec', icon: '📏', title: 'Grand saut', desc: 'Précision de plus de 3 m.', type: 'challenge' },
             ] },
-            { id: 'pk.roofgap', icon: '🏚️', title: 'Roof gap', desc: 'Sauter d\'un toit à un autre.', type: 'goal', children: [
-              { id: 'pk.roofgap3', icon: '🦅', title: 'Grand roof gap', desc: 'Roof gap de plus de 3 m.', type: 'challenge' },
-            ] },
+            { id: 'pk.roofgap', icon: '🏚️', title: 'Roof gap', desc: 'Sauter d\'un toit à un autre.', type: 'goal' },
           ] },
           { id: 'pk.vault', icon: '🐒', title: 'Passement', desc: 'Maîtriser speed vault et lazy vault.', children: [
             { id: 'pk.kong', icon: '🦍', title: 'Saut de chat', desc: 'Kong vault propre.', children: [
@@ -45,13 +44,9 @@ window.DEFAULT_TABS = [
             ] },
           ] },
           { id: 'pk.jam', icon: '🤝', title: 'Jam', desc: 'Participer à une jam avec d\'autres crews.', children: [
-            { id: 'pk.jam3', icon: '🎪', title: 'Habitué des jams', desc: 'Participer à 3 jams.', type: 'goal', target: 3, unit: 'jams', children: [
-              { id: 'pk.jamorga', icon: '📣', title: 'Organisateur de jam', desc: 'Organiser ta propre jam.', type: 'challenge' },
-            ] },
+            { id: 'pk.jam3', icon: '🎪', title: 'Habitué des jams', desc: 'Participer à 3 jams.', type: 'goal', target: 3, unit: 'jams' },
             { id: 'pk.teach', icon: '👨‍🏫', title: 'Transmettre', desc: 'Apprendre un mouvement à un débutant.', type: 'goal' },
-            { id: 'pk.abroad', icon: '✈️', title: 'Spot étranger', desc: 'S\'entraîner sur un spot à l\'étranger.', type: 'goal', children: [
-              { id: 'pk.abroad5', icon: '🌍', title: 'Traceur international', desc: 'S\'entraîner dans 5 pays différents.', type: 'challenge', target: 5, unit: 'pays' },
-            ] },
+            { id: 'pk.abroad', icon: '✈️', title: 'Spot étranger', desc: 'S\'entraîner sur un spot à l\'étranger.', type: 'goal' },
           ] },
         ] },
 
@@ -70,9 +65,7 @@ window.DEFAULT_TABS = [
           { id: 'ac.tricking', icon: '🥋', title: 'Tricking', desc: 'Enchaîner 3 figures de tricking en salle.', type: 'goal', children: [
             { id: 'ac.btwist', icon: '🦋', title: 'B-twist', desc: 'Butterfly twist propre.', type: 'goal' },
             { id: 'ac.full', icon: '🌀', title: 'Vrille', desc: 'Salto arrière avec une vrille complète (full).', type: 'challenge', children: [
-              { id: 'ac.double', icon: '💫', title: 'Double salto', desc: 'Double salto arrière.', type: 'challenge', children: [
-                { id: 'ac.dfull', icon: '🌠', title: 'Double full', desc: 'Salto arrière avec deux vrilles.', type: 'challenge' },
-              ] },
+              { id: 'ac.double', icon: '💫', title: 'Double salto', desc: 'Double salto arrière.', type: 'challenge' },
             ] },
           ] },
         ] },
@@ -150,10 +143,13 @@ window.DEFAULT_TABS = [
       children: [
         // ---------- Randonnée ----------
         { id: 'mo.rando', icon: '🥾', title: 'Randonnée', desc: 'Une vraie rando de plus de 10 km.', children: [
-          { id: 'mo.dplus', icon: '📈', title: 'Mille mètres', desc: '1000 m de dénivelé positif dans la journée.', children: [
-            { id: 'mo.dplus2', icon: '🚠', title: 'Cuisses d\'acier', desc: '2000 m de dénivelé positif dans la journée.', type: 'goal', children: [
-              { id: 'mo.dplus5', icon: '⛰️', title: 'Cinq mille', desc: '5000 m de dénivelé positif en une seule sortie.', type: 'challenge', children: [
-                { id: 'mo.dplus10', icon: '🌋', title: 'Dix mille', desc: '10 000 m de dénivelé positif en une seule sortie.', type: 'challenge' },
+          // dénivelé positif cumulé sur une seule sortie
+          { id: 'mo.dplus', icon: '📈', title: 'Mille mètres', desc: '1000 m de D+ cumulé en une seule sortie.', children: [
+            { id: 'mo.dplus2', icon: '🚠', title: 'Cuisses d\'acier', desc: '2000 m de D+ cumulé en une seule sortie.', type: 'goal', children: [
+              { id: 'mo.dplus4', icon: '🦵', title: 'Quatre mille', desc: '4000 m de D+ cumulé en une seule sortie.', type: 'goal', children: [
+                { id: 'mo.dplus5', icon: '⛰️', title: 'Cinq mille', desc: '5000 m de D+ cumulé en une seule sortie.', type: 'challenge', children: [
+                  { id: 'mo.dplus10', icon: '🌋', title: 'Dix mille', desc: '10 000 m de D+ en une seule sortie : un ultra-trail.', type: 'challenge' },
+                ] },
               ] },
             ] },
           ] },
@@ -176,11 +172,16 @@ window.DEFAULT_TABS = [
               { id: 'mo.montblanc', icon: '👑', title: 'Toit de l\'Europe', desc: 'Gravir le Mont Blanc.', type: 'challenge' },
             ] },
           ] },
-          { id: 'av.summit3k', icon: '☁️', title: 'Tête dans les nuages', desc: 'Atteindre un sommet de plus de 3000 m.', type: 'goal', children: [
-            { id: 'av.summit4k', icon: '🏔️', title: 'Quatre mille', desc: 'Gravir un sommet de plus de 4000 m.', type: 'challenge', children: [
-              { id: 'mo.5k', icon: '🦒', title: 'Cinq mille', desc: 'Gravir un sommet de plus de 5000 m (Kilimandjaro, Elbrouz…).', type: 'challenge', children: [
-                { id: 'mo.6k', icon: '🦙', title: 'Six mille', desc: 'Gravir un sommet de plus de 6000 m (Aconcagua, pics himalayens…).', type: 'challenge', children: [
-                  { id: 'mo.7k', icon: '🐉', title: 'Sept mille', desc: 'Gravir un sommet de plus de 7000 m.', type: 'challenge' },
+          // altitude : un palier tous les 1000 m
+          { id: 'mo.2k', icon: '🌲', title: 'Deux mille', desc: 'Atteindre un sommet de plus de 2000 m.', children: [
+            { id: 'av.summit3k', icon: '☁️', title: 'Trois mille', desc: 'Atteindre un sommet de plus de 3000 m.', type: 'goal', children: [
+              { id: 'av.summit4k', icon: '🏔️', title: 'Quatre mille', desc: 'Gravir un sommet de plus de 4000 m.', type: 'challenge', children: [
+                { id: 'mo.5k', icon: '🦒', title: 'Cinq mille', desc: 'Gravir un sommet de plus de 5000 m (Kilimandjaro, Elbrouz…).', type: 'challenge', children: [
+                  { id: 'mo.6k', icon: '🦙', title: 'Six mille', desc: 'Gravir un sommet de plus de 6000 m (Aconcagua, pics himalayens…).', type: 'challenge', children: [
+                    { id: 'mo.7k', icon: '🐉', title: 'Sept mille', desc: 'Gravir un sommet de plus de 7000 m.', type: 'challenge', children: [
+                      { id: 'mo.8k', icon: '👑', title: 'Huit mille', desc: 'Gravir un des quatorze sommets de plus de 8000 m.', type: 'challenge' },
+                    ] },
+                  ] },
                 ] },
               ] },
             ] },
@@ -191,9 +192,24 @@ window.DEFAULT_TABS = [
 
         // ---------- Escalade ----------
         { id: 'mo.esc', icon: '🧗', title: 'Escalade', desc: 'Première voie en falaise.', children: [
+          // voie
           { id: 'mo.tete', icon: '🔗', title: 'En tête', desc: 'Grimper une voie en tête.', children: [
             { id: 'mo.6a', icon: '6️⃣', title: 'Sixième degré', desc: 'Enchaîner une voie en 6a.', type: 'goal', children: [
-              { id: 'mo.7a', icon: '7️⃣', title: 'Septième degré', desc: 'Enchaîner une voie en 7a.', type: 'challenge' },
+              { id: 'mo.7a', icon: '7️⃣', title: 'Septième degré', desc: 'Enchaîner une voie en 7a.', type: 'goal', children: [
+                { id: 'mo.7b', icon: '🧗', title: 'Sept B', desc: 'Enchaîner une voie en 7b.', type: 'challenge', children: [
+                  { id: 'mo.8a', icon: '8️⃣', title: 'Huitième degré', desc: 'Enchaîner une voie en 8a.', type: 'challenge' },
+                ] },
+              ] },
+            ] },
+          ] },
+          // bloc
+          { id: 'mo.bloc', icon: '🖐️', title: 'Bloc', desc: 'Sortir un premier bloc dehors.', children: [
+            { id: 'mo.bloc7a', icon: '7️⃣', title: 'Bloc 7A', desc: 'Sortir un bloc en 7A.', type: 'goal', children: [
+              { id: 'mo.bloc7b', icon: '💪', title: 'Bloc 7B', desc: 'Sortir un bloc en 7B.', type: 'challenge', children: [
+                { id: 'mo.bloc7c', icon: '🔥', title: 'Bloc 7C', desc: 'Sortir un bloc en 7C.', type: 'challenge', children: [
+                  { id: 'mo.bloc8a', icon: '8️⃣', title: 'Bloc 8A', desc: 'Sortir un bloc en 8A.', type: 'challenge' },
+                ] },
+              ] },
             ] },
           ] },
           { id: 'mo.gv', icon: '🧱', title: 'Grande voie', desc: 'Grimper une grande voie de plusieurs longueurs.', type: 'goal' },
@@ -220,8 +236,7 @@ window.DEFAULT_TABS = [
         { id: 'vo.stop', icon: '👍', title: 'Autostop', desc: 'Faire un premier trajet en stop.', children: [
           { id: 'vo.stop1k', icon: '🛣️', title: 'Pouce levé', desc: 'Cumuler 1000 km en stop.', type: 'goal', target: 1000, unit: 'km', children: [
             { id: 'vo.stop10k', icon: '🌍', title: 'Autostoppeur légendaire', desc: 'Cumuler 10 000 km en stop.', type: 'challenge', target: 10000, unit: 'km', children: [
-              { id: 'vo.shanghai', icon: '🏯', title: 'Route de la Soie', desc: 'Rejoindre Shanghai en stop en partant de France.', type: 'challenge' },
-              { id: 'vo.stop25k', icon: '🌏', title: 'Tour du monde au pouce', desc: 'Cumuler 25 000 km en stop.', type: 'challenge', target: 25000, unit: 'km' },
+              { id: 'vo.shanghai', icon: '🏯', title: 'Route de la Soie', desc: 'Rejoindre Shanghai en stop en partant de France. L\'objectif ultime.', type: 'challenge' },
             ] },
           ] },
           { id: 'vo.cars', icon: '🚗', title: 'Cent conducteurs', desc: 'Monter dans 100 voitures différentes en stop.', type: 'goal', target: 100, unit: 'voitures', children: [
@@ -231,14 +246,49 @@ window.DEFAULT_TABS = [
         ] },
 
         // ---------- Pays ----------
-        { id: 'av.country', icon: '🛂', title: 'Pays', desc: 'Visiter un autre pays.', children: [
-          { id: 'av.c10', icon: '🌐', title: 'Globe-trotter', desc: 'Visiter 10 pays.', type: 'goal', target: 10, unit: 'pays', children: [
-            { id: 'av.c30', icon: '🗾', title: 'Citoyen du monde', desc: 'Visiter 30 pays.', type: 'challenge', target: 30, unit: 'pays', children: [
-              { id: 'av.c50', icon: '🧳', title: 'Cinquante drapeaux', desc: 'Visiter 50 pays.', type: 'challenge', target: 50, unit: 'pays' },
+        // ---------- Le monde, par régions (pas de décompte de pays) ----------
+        { id: 'av.country', icon: '🛂', title: 'Le monde', desc: 'Visiter un autre pays.', children: [
+          { id: 'eu.root', hub: true, icon: '🏰', title: 'Europe', desc: 'Voyager dans un autre pays d\'Europe.', children: [
+            { id: 'eu.west', icon: '🥐', title: 'Europe de l\'Ouest', desc: 'Parcourir l\'Europe de l\'Ouest : péninsule Ibérique, Benelux, îles Britanniques…' },
+            { id: 'eu.south', icon: '🍋', title: 'Méditerranée', desc: 'Parcourir l\'Italie, la Grèce et les îles de Méditerranée.' },
+            { id: 'eu.north', icon: '🛶', title: 'Scandinavie', desc: 'Parcourir la Norvège, la Suède, la Finlande ou le Danemark.', type: 'goal', children: [
+              { id: 'eu.iceland', icon: '🌋', title: 'Terre de feu et de glace', desc: 'Voyager en Islande.', type: 'goal' },
+            ] },
+            { id: 'eu.east', icon: '🏛️', title: 'Est & Balkans', desc: 'Parcourir l\'Europe de l\'Est et les Balkans.', type: 'goal' },
+            { id: 'eu.all', icon: '🇪🇺', title: 'Toute l\'Europe', desc: 'Avoir mis les pieds dans tous les pays de l\'Union européenne.', type: 'challenge' },
+            { id: 'eu.russia', icon: '🐻', title: 'Russie', desc: 'Voyager en Russie.', type: 'goal', children: [
+              { id: 'eu.transsib', icon: '🚂', title: 'Transsibérien', desc: 'Traverser la Russie par le Transsibérien.', type: 'challenge' },
             ] },
           ] },
-          { id: 'av.continent', icon: '🌏', title: 'Autre continent', desc: 'Mettre les pieds sur un autre continent.', type: 'goal', children: [
-            { id: 'av.allcont', icon: '🗺️', title: 'Six continents', desc: 'Poser le pied sur les 6 continents habités.', type: 'challenge', target: 6, unit: 'continents' },
+          { id: 'av.continent', icon: '🌏', title: 'Autre continent', desc: 'Mettre les pieds sur un autre continent.', type: 'goal' },
+          { id: 'af.root', hub: true, icon: '🦁', title: 'Afrique', desc: 'Voyager en Afrique.', children: [
+            { id: 'af.maghreb', icon: '🕌', title: 'Maghreb', desc: 'Voyager au Maroc, en Algérie ou en Tunisie.' },
+            { id: 'af.sahara', icon: '🐪', title: 'Sahara', desc: 'Traverser ou dormir dans le Sahara.', type: 'goal' },
+            { id: 'af.west', icon: '🥁', title: 'Afrique de l\'Ouest', desc: 'Voyager en Afrique de l\'Ouest.', type: 'goal' },
+            { id: 'af.east', icon: '🦒', title: 'Afrique de l\'Est', desc: 'Voyager en Afrique de l\'Est (Kenya, Tanzanie, Éthiopie…).', type: 'goal' },
+            { id: 'af.south', icon: '🐘', title: 'Afrique australe', desc: 'Voyager en Afrique australe.', type: 'goal' },
+          ] },
+          { id: 'as.root', hub: true, icon: '🐉', title: 'Asie', desc: 'Voyager en Asie.', children: [
+            { id: 'as.central', icon: '🐎', title: 'Asie centrale', desc: 'Parcourir les routes de la Soie : Ouzbékistan, Kirghizstan, Kazakhstan…', type: 'goal', children: [
+              { id: 'as.mongolia', icon: '🏇', title: 'Steppes', desc: 'Voyager en Mongolie.', type: 'challenge' },
+            ] },
+            { id: 'as.india', icon: '🕉️', title: 'Sous-continent', desc: 'Voyager en Inde ou au Népal.', type: 'goal' },
+            { id: 'as.china', icon: '🏯', title: 'Chine', desc: 'Voyager en Chine.', type: 'goal' },
+            { id: 'as.japan', icon: '🗾', title: 'Japon', desc: 'Voyager au Japon.', type: 'goal' },
+            { id: 'as.southeast', icon: '🛕', title: 'Asie du Sud-Est', desc: 'Parcourir l\'Asie du Sud-Est : Thaïlande, Vietnam, Indonésie, Philippines…', type: 'goal' },
+          ] },
+          { id: 'am.root', hub: true, icon: '🌎', title: 'Amériques', desc: 'Voyager sur le continent américain.', children: [
+            { id: 'am.north', icon: '🗽', title: 'Amérique du Nord', desc: 'Voyager aux États-Unis ou au Canada.', type: 'goal' },
+            { id: 'am.central', icon: '🌮', title: 'Amérique centrale', desc: 'Parcourir le Mexique et l\'Amérique centrale.', type: 'goal' },
+            { id: 'am.south', icon: '🦙', title: 'Amérique du Sud', desc: 'Parcourir l\'Amérique du Sud.', type: 'goal', children: [
+              { id: 'am.patagonia', icon: '🐧', title: 'Patagonie', desc: 'Aller au bout du monde, en Patagonie.', type: 'challenge' },
+            ] },
+          ] },
+          { id: 'oc.root', hub: true, icon: '🦘', title: 'Océanie', desc: 'Voyager en Australie ou en Nouvelle-Zélande.', type: 'goal', children: [
+            { id: 'oc.pacific', icon: '🌺', title: 'Îles du Pacifique', desc: 'Voyager dans les îles du Pacifique.', type: 'challenge' },
+          ] },
+          { id: 'po.root', hub: true, icon: '🧊', title: 'Pôles', desc: 'Passer le cercle polaire.', type: 'goal', children: [
+            { id: 'po.antarctica', icon: '🐧', title: 'Antarctique', desc: 'Poser le pied en Antarctique.', type: 'challenge' },
           ] },
           { id: 'av.solo', icon: '🧍', title: 'En solo', desc: 'Voyager seul au moins une semaine.', type: 'goal' },
         ] },
@@ -340,9 +390,7 @@ window.DEFAULT_TABS = [
           ] },
           { id: 'sc.abroad', icon: '🌐', title: 'Jouer à l\'étranger', desc: 'Jouer un spectacle à l\'étranger.', type: 'goal' },
           { id: 'sc.paid', icon: '💶', title: 'Cachet', desc: 'Être payé pour un spectacle.', type: 'goal', children: [
-            { id: 'sc.intermittent', icon: '📜', title: 'Intermittent', desc: 'Obtenir le statut d\'intermittent du spectacle.', type: 'challenge' },
-            { id: 'sc.100', icon: '💯', title: 'Cent représentations', desc: 'Jouer 100 représentations.', type: 'challenge', target: 100, unit: 'dates' },
-          ] },
+            { id: 'sc.intermittent', icon: '📜', title: 'Intermittent', desc: 'Obtenir le statut d\'intermittent du spectacle.', type: 'challenge' },          ] },
         ] },
 
         // ---------- Transmission ----------
@@ -372,10 +420,15 @@ window.DEFAULT_TABS = [
             { id: 'mu.ep', icon: '💿', title: 'EP', desc: 'Sortir un EP (au moins 4 morceaux).', type: 'challenge' },
           ] },
         ] },
-        { id: 'mu.duo', icon: '🎼', title: 'Harmonies', desc: 'Chanter ou jouer à deux voix en harmonie.', type: 'goal' },
+        { id: 'mu.sing', icon: '🎤', title: 'Guitare-voix', desc: 'Chanter un morceau entier en t\'accompagnant.', children: [
+          { id: 'mu.duo', icon: '🎼', title: 'Harmonies', desc: 'Chanter ou jouer à deux voix en harmonie.', type: 'goal' },
+          { id: 'mu.voice', icon: '🗣️', title: 'Voix posée', desc: 'Prendre des cours de chant / travailler ta voix sur plusieurs mois.', type: 'goal' },
+        ] },
         { id: 'mu.share', icon: '🌍', title: 'Langage universel', desc: 'Faire de la musique avec des gens rencontrés en voyage.', type: 'goal' },
         { id: 'cr.compose', icon: '✍️', title: 'Compositeur', desc: 'Composer un morceau original.', type: 'goal' },
-        { id: 'mu.instr2', icon: '🪕', title: 'Multi-instrumentiste', desc: 'Jouer d\'un deuxième instrument.', type: 'goal' },
+        { id: 'mu.instr2', icon: '🎹', title: 'Multi-instrumentiste', desc: 'Jouer d\'un deuxième instrument (piano…).', type: 'goal', children: [
+          { id: 'mu.piano', icon: '🎹', title: 'Pianiste', desc: 'Jouer un morceau entier au piano, à deux mains.', type: 'goal' },
+        ] },
       ],
     },
   },
@@ -430,10 +483,17 @@ window.DEFAULT_TABS = [
           ] },
         ] },
         { id: 'es.lang', icon: '🗣️', title: 'Langues', desc: 'Tenir une conversation de 10 min dans une langue étrangère.', children: [
-          { id: 'es.lang2', icon: '🎬', title: 'Sans sous-titres', desc: 'Regarder un film en VO sans sous-titres et tout comprendre.', type: 'goal', children: [
-            { id: 'es.dream', icon: '💭', title: 'Bilingue', desc: 'Rêver dans une autre langue.', type: 'challenge' },
+          { id: 'es.en', icon: '💂', title: 'Anglais courant', desc: 'Parler anglais couramment.', type: 'goal', children: [
+            { id: 'es.lang2', icon: '🎬', title: 'Sans sous-titres', desc: 'Regarder un film en VO sans sous-titres et tout comprendre.', type: 'goal', children: [
+              { id: 'es.dream', icon: '💭', title: 'Bilingue', desc: 'Rêver dans une autre langue.', type: 'challenge' },
+            ] },
           ] },
-          { id: 'es.lang3', icon: '🈚', title: 'Polyglotte', desc: 'Apprendre les bases d\'une 3e langue.', type: 'goal' },
+          { id: 'es.lang3', icon: '🈚', title: 'Polyglotte', desc: 'Apprendre les bases d\'une 3e langue.', type: 'goal', children: [
+            { id: 'es.es', icon: '💃', title: 'Espagnol courant', desc: 'Tenir une vraie discussion en espagnol sans chercher tes mots.', type: 'goal' },
+            { id: 'es.pt', icon: '⚽', title: 'Português fluente', desc: 'Tenir une vraie discussion en portugais sans chercher tes mots.', type: 'goal' },
+            { id: 'es.4', icon: '🌐', title: 'Quatre langues', desc: 'Parler couramment 4 langues.', type: 'challenge' },
+            { id: 'es.asia', icon: '🀄', title: 'Autre alphabet', desc: 'Apprendre les bases d\'une langue à l\'alphabet différent (russe, mandarin, arabe…).', type: 'challenge' },
+          ] },
         ] },
         { id: 'es.cook', icon: '🍳', title: 'Cuisine', desc: 'Cuisiner un plat sans recette.', children: [
           { id: 'es.cook10', icon: '👨‍🍳', title: 'Carnet de recettes', desc: 'Maîtriser 10 plats par cœur.', type: 'goal', target: 10, unit: 'plats', children: [

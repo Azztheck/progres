@@ -56,7 +56,7 @@ let view = { x: 40, y: 0, s: 1 };
 function build() {
   nodes = {}; tabs = [];
   const walk = (o, parent, tab) => {
-    nodes[o.id] = { id: o.id, icon: o.icon, title: o.title, desc: o.desc || '', type: o.type || 'task', target: o.target || 0, unit: o.unit || '', parent, tab, children: [] };
+    nodes[o.id] = { id: o.id, icon: o.icon, title: o.title, desc: o.desc || '', type: o.type || 'task', target: o.target || 0, unit: o.unit || '', hub: !!o.hub, parent, tab, children: [] };
     if (parent) nodes[parent].children.push(o.id);
     (o.children || []).forEach(c => walk(c, o.id, tab));
   };
@@ -81,6 +81,8 @@ function applyPreset() {
   }
   for (const [id, v] of Object.entries(P.progress || {})) if (nodes[id]) st.progress[id] = Math.max(st.progress[id] || 0, v);
   for (const [id, t] of Object.entries(P.notes || {})) if (nodes[id] && !st.notes[id]) st.notes[id] = t;
+  // ce que tu as confirmé entre-temps n'est plus « à vérifier »
+  for (const id of P.verified || []) delete st.unverified[id];
   st.preset = P.version;
   save();
   return n;
@@ -196,7 +198,8 @@ function nodeHTML(n, p) {
     bar = `<div class="bar"><i style="width:${v * 100}%"></i></div>`;
   }
   // les branches qui partent de la racine sont les sous-catégories : on affiche leur nom
-  const label = p && p.d === 1 ? `<div class="label">${esc(n.title)}</div>` : '';
+  // (et les nœuds marqués `hub` plus loin dans l'arbre, ex. les continents)
+  const label = p && (p.d === 1 || n.hub) ? `<div class="label">${esc(n.title)}</div>` : '';
   return `<div class="node ${cls}" data-id="${esc(n.id)}" style="${style}">${label}<div class="frame"><span class="ic">${esc(n.icon)}</span></div>${bar}</div>`;
 }
 
