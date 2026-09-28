@@ -395,45 +395,8 @@ window.DEFAULT_TABS = [
             ] },
           ] },
           { id: 'mu.share', icon: '🌍', title: 'Langage universel', desc: 'Faire de la musique avec des gens rencontrés en voyage.', type: 'goal' },
-          { id: 'cr.compose', icon: '✍️', title: 'Compositeur', desc: 'Composer un morceau original.', type: 'goal' },
-        ] },
-
-        // ---------- Guitare ----------
-        { id: 'gu.root', icon: '🎸', title: 'Guitare', desc: 'Jouer tes premiers accords ouverts à la guitare.', children: [
-          { id: 'gu.barre', icon: '✋', title: 'Accords barrés', desc: 'Enchaîner des accords barrés proprement (Fa, Si mineur…).', children: [
-            { id: 'gu.caged', icon: '🗺️', title: 'Tout le manche', desc: 'Retrouver n\'importe quel accord partout sur le manche (système CAGED).', type: 'goal', children: [
-              { id: 'gu.jazz', icon: '🎷', title: 'Accords jazz', desc: 'Jouer des grilles en accords de 7e, 9e et 13e.', type: 'challenge' },
-            ] },
-          ] },
-          { id: 'gu.rhythm', icon: '🥁', title: 'Rythmique', desc: 'Tenir une rythmique au métronome sans décrocher.', children: [
-            { id: 'gu.funk', icon: '🕺', title: 'Rythmique funk', desc: 'Une rythmique funk en doubles croches avec ghost notes.', type: 'goal' },
-          ] },
-          { id: 'gu.picking', icon: '🤏', title: 'Picking', desc: 'Jouer un morceau en arpèges aux doigts.', type: 'goal', children: [
-            { id: 'gu.travis', icon: '🤠', title: 'Travis picking', desc: 'Basse alternée au pouce + mélodie aux doigts.', type: 'goal' },
-          ] },
-          { id: 'gu.solo', icon: '🔥', title: 'Premier solo', desc: 'Improviser sur un blues avec la pentatonique.', type: 'goal', children: [
-            { id: 'gu.impro', icon: '🌀', title: 'Improvisateur', desc: 'Improviser sur une grille en suivant les accords (modes, notes cibles).', type: 'challenge' },
-          ] },
-        ] },
-
-        // ---------- Piano ----------
-        { id: 'mu.instr2', icon: '🎹', title: 'Piano', desc: 'Jouer de ton deuxième instrument : le piano.', children: [
-          { id: 'pi.chords', icon: '🎵', title: 'Accompagnateur', desc: 'Accompagner une chanson aux accords au piano.' },
-          { id: 'mu.piano', icon: '🙌', title: 'Deux mains', desc: 'Jouer un morceau entier au piano, à deux mains.', type: 'goal', children: [
-            { id: 'pi.read', icon: '📄', title: 'Déchiffreur', desc: 'Déchiffrer une partition simple à deux mains.', type: 'goal', children: [
-              { id: 'pi.classic', icon: '🎼', title: 'Pièce classique', desc: 'Jouer une pièce classique de niveau fin de 1er cycle de conservatoire.', type: 'challenge' },
-            ] },
-          ] },
-        ] },
-
-        // ---------- Chant ----------
-        { id: 'mu.sing', icon: '🎤', title: 'Chant', desc: 'Chanter un morceau entier en t\'accompagnant.', children: [
-          { id: 'ch.pitch', icon: '🎯', title: 'Juste', desc: 'Chanter une gamme a cappella sans dévier.' },
           { id: 'mu.duo', icon: '🎼', title: 'Harmonies', desc: 'Chanter ou jouer à deux voix en harmonie.', type: 'goal' },
-          { id: 'mu.voice', icon: '🗣️', title: 'Voix posée', desc: 'Travailler ta voix plusieurs mois (cours, exercices).', type: 'goal', children: [
-            { id: 'ch.range', icon: '📶', title: 'Deux octaves', desc: 'Chanter confortablement sur deux octaves.', type: 'challenge' },
-            { id: 'ch.mix', icon: '💥', title: 'Voix mixte', desc: 'Maîtriser la voix mixte / le belting sans forcer.', type: 'challenge' },
-          ] },
+          { id: 'cr.compose', icon: '✍️', title: 'Compositeur', desc: 'Composer un morceau original.', type: 'goal' },
         ] },
 
         // ---------- Théorie : du débutant au pro (repères : grades 1 à 8 ABRSM) ----------

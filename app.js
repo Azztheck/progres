@@ -155,20 +155,53 @@ function renderTabs() {
 }
 
 let pos = {};
-// ---------- Carte du monde ----------
+// ---------- Globe ----------
 const CC = window.WORLD ? Object.fromEntries(window.WORLD.countries.map(c => [c.id, c])) : {};
 function visitedStats() {
   if (!window.WORLD) return { n: 0, conts: 0, pct: 0 };
   const ids = Object.keys(st.countries).filter(id => CC[id]);
   return { n: ids.length, conts: new Set(ids.map(id => CC[id].cont)).size, pct: Math.round(ids.length / window.WORLD.countries.length * 100) };
 }
+// le globe gère lui-même rotation (glisser) et zoom (molette / pincer) : pas de transform CSS
+const globe = { rot: [-15, -42, 0], k: 1, feats: null };
+const isGlobe = () => !!tabOf(st.tab)?.map;
+function globeInit() {
+  if (globe.feats) return;
+  const T = window.WORLD.topo;
+  globe.feats = topojson.feature(T, T.objects.countries).features;
+  globe.proj = d3.geoOrthographic().clipAngle(90).precision(0.4);
+  globe.path = d3.geoPath(globe.proj);
+  globe.grat = d3.geoGraticule10();
+}
+function globeDraw() {
+  const svg = $('#nodes svg.world'); if (!svg) return;
+  const stage = $('#stage'), W = stage.clientWidth, H = stage.clientHeight;
+  const r = Math.min(W, H - 60) / 2 - 14;
+  globe.proj.scale(r * globe.k).translate([W / 2, (H - 30) / 2]).rotate(globe.rot);
+  svg.setAttribute('width', W); svg.setAttribute('height', H);
+  const [cx, cy] = globe.proj.translate(), R = globe.proj.scale();
+  const atmo = svg.querySelector('.atmo');
+  atmo.setAttribute('cx', cx); atmo.setAttribute('cy', cy); atmo.setAttribute('r', R * 1.08);
+  svg.querySelector('.sphere').setAttribute('d', globe.path({ type: 'Sphere' }));
+  svg.querySelector('.grat').setAttribute('d', globe.path(globe.grat));
+  const ps = svg.querySelectorAll('.c');
+  for (let i = 0; i < ps.length; i++) ps[i].setAttribute('d', globe.path(globe.feats[i]) || '');
+}
+let globeRaf = 0;
+const globeRedraw = () => { if (!globeRaf) globeRaf = requestAnimationFrame(() => { globeRaf = 0; globeDraw(); }); };
 function renderMap(t) {
-  const W = window.WORLD, v = visitedStats();
+  globeInit();
+  const v = visitedStats();
   pos = {};
+  view = { x: 0, y: 0, s: 1 };
   const svg = $('#links');
   svg.innerHTML = ''; svg.setAttribute('width', 0); svg.setAttribute('height', 0);
-  $('#nodes').innerHTML = `<svg class="world" width="${W.w}" height="${W.h}" viewBox="0 0 ${W.w} ${W.h}"><path class="sphere" d="${W.sphere}"/>` +
-    W.countries.filter(c => c.d).map(c => `<path class="c${st.countries[c.id] ? ' v' : ''}" data-cc="${c.id}" d="${c.d}"/>`).join('') + '</svg>';
+  $('#nodes').innerHTML = `<svg class="world">
+    <defs><radialGradient id="atmo-g"><stop offset="86%" stop-color="#6ff7e8" stop-opacity=".22"/><stop offset="100%" stop-color="#7a4dff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="sea-g" cx="38%" cy="32%"><stop offset="0%" stop-color="#1b2a6b"/><stop offset="100%" stop-color="#070620"/></radialGradient></defs>
+    <circle class="atmo" fill="url(#atmo-g)"/><path class="sphere" fill="url(#sea-g)"/><path class="grat"/>` +
+    globe.feats.map(f => `<path class="c${st.countries[f.id] ? ' v' : ''}" data-cc="${f.id}"/>`).join('') + '</svg>';
+  globeDraw();
   $('#tabinfo').innerHTML = `<b>${esc(t.icon)} Carte du monde</b>${v.n} pays · ${v.conts} continent${v.conts > 1 ? 's' : ''} · ${v.pct} % du monde`;
   applyView();
 }
@@ -275,12 +308,9 @@ function applyView() {
 }
 function centerView() {
   const stage = $('#stage'), W = stage.clientWidth, H = stage.clientHeight - 60; // 60 : place pour l'info en bas
-  if (tabOf(st.tab).map) {
-    const M = window.WORLD;
-    view.s = Math.min((W - 20) / M.w, H / M.h);
-    view.x = (W - M.w * view.s) / 2;
-    view.y = Math.max(10, (H - M.h * view.s) / 2);
-    return applyView();
+  if (isGlobe()) {
+    view = { x: 0, y: 0, s: 1 }; globe.k = 1;
+    applyView(); return globeDraw();
   }
   const h = Math.max(...Object.values(pos).map(p => p.y)) + S + 14;
   const w = Math.max(...Object.values(pos).map(p => p.x)) + S;
@@ -292,7 +322,8 @@ function centerView() {
   applyView();
 }
 function zoomAt(f, cx, cy) {
-  const s = Math.max(.15, Math.min(6, view.s * f)); // jusqu'à ×6 pour les petits pays de la carte
+  if (isGlobe()) { globe.k = Math.max(.8, Math.min(20, globe.k * f)); return globeRedraw(); } // ×20 pour les micro-États
+  const s = Math.max(.3, Math.min(2.5, view.s * f));
   view.x = cx - (cx - view.x) * (s / view.s);
   view.y = cy - (cy - view.y) * (s / view.s);
   view.s = s;
@@ -323,7 +354,15 @@ function zoomAt(f, cx, cy) {
     const dx = e.clientX - last.x, dy = e.clientY - last.y;
     moved += Math.abs(dx) + Math.abs(dy);
     last = { x: e.clientX, y: e.clientY };
-    if (moved > 6) { view.x += dx; view.y += dy; applyView(); stage.classList.add('dragging'); hideHover(); }
+    if (moved > 6) {
+      if (isGlobe()) {
+        const k = 0.28 / globe.k; // plus on zoome, plus la rotation est fine
+        globe.rot[0] += dx * k;
+        globe.rot[1] = Math.max(-89, Math.min(89, globe.rot[1] - dy * k));
+        globeRedraw();
+      } else { view.x += dx; view.y += dy; applyView(); }
+      stage.classList.add('dragging'); hideHover();
+    }
   });
   const up = e => {
     if (!ptrs.has(e.pointerId)) return;
@@ -721,7 +760,8 @@ $('#tabs').addEventListener('click', e => {
 $('#btn-menu').onclick = openMenu;
 $('#btn-list').onclick = openCountryList;
 $('#btn-new-tab').onclick = openTabForm;
-window.addEventListener('resize', () => centerView());
+// sur mobile la barre d'adresse redimensionne sans cesse : on ne perd pas le zoom du globe
+window.addEventListener('resize', () => isGlobe() ? globeDraw() : centerView());
 
 build();
 const prefilled = applyPreset();

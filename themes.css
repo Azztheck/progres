@@ -229,7 +229,9 @@ html[data-theme] .node.locked .label { opacity: 1; }
 
 /* ---------- Carte du monde ---------- */
 .world { display: block; overflow: visible; }
-.world .sphere { fill: #0b0a24; stroke: var(--edge); stroke-width: 3; }
+.world .sphere { stroke: var(--edge); stroke-width: 2; }
+.world .grat { fill: none; stroke: rgba(111, 247, 232, .09); stroke-width: 1; pointer-events: none; }
+.world .atmo { pointer-events: none; }
 .world .c {
   fill: var(--n-bg); stroke: var(--outline); stroke-width: .8; stroke-linejoin: round;
   shape-rendering: crispEdges; cursor: pointer; transition: fill .15s;
