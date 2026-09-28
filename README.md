@@ -1,8 +1,10 @@
-# 🏆 Progrès — les trophées de ma vie
+# ⚔️ Arcanes du Destin — les trophées de ma vie
 
-Un système de « Progrès » à la Minecraft, mais pour la vraie vie : des arbres par domaine
-(sport, parkour, aventure, création, esprit, social, vie & pro, santé…) avec des objectifs
-à débloquer, de l'XP, des niveaux et des toasts « Progrès réalisé ! ».
+Des arbres de hauts faits pour la vraie vie, en pixel art dark fantasy : un arbre par
+domaine (sport, parkour, aventure, création, esprit, social, vie & pro, santé…), des runes
+à éveiller, de l'essence (XP), des niveaux, et des notifications « Relique obtenue ».
+
+👉 https://azztheck.github.io/progres/
 
 ## Utilisation
 
@@ -13,13 +15,16 @@ Un système de « Progrès » à la Minecraft, mais pour la vraie vie : des arbr
 - **☰** → journal des déblocages, stats par onglet, export/import de la sauvegarde.
 - Glisser pour se déplacer, molette / pincer pour zoomer.
 
-Types de blocs (comme dans Minecraft) :
+Types de blocs :
 
-| Cadre | Type | XP |
+| Forme | Type | Essence |
 |---|---|---|
-| carré | Progrès | 10 |
-| arrondi | Objectif | 25 |
-| étoile | Défi | 50 |
+| carré crénelé | Rune (`task`) | 10 |
+| écu | Sceau (`goal`) | 25 |
+| losange | Relique (`challenge`) | 50 |
+
+L'habillage est dans `themes.css` (variables de couleur en haut), le vocabulaire dans
+`THEMES` au début de `app.js`.
 
 ## Sauvegarde
 
@@ -46,3 +51,4 @@ Tout est dans [`data/defaults.js`](data/defaults.js). Un nœud :
 - Objectifs récurrents (hebdo / annuels) et statistiques dans le temps
 - Photos attachées aux souvenirs
 - PWA installable sur le téléphone
+- Vraies icônes en pixel art à la place des emojis

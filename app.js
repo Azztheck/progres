@@ -3,25 +3,16 @@
 const KEY = 'progres.v1';
 const S = 52, COLW = 118, ROWH = 82;
 const XP = { task: 10, goal: 25, challenge: 50 };
-// Thèmes : l'habillage (CSS dans themes.css) + le vocabulaire qui va avec
+// Thème : l'habillage (CSS dans themes.css) + le vocabulaire qui va avec.
+// Un seul pour l'instant, mais la structure permet d'en rajouter.
 const THEMES = {
-  grimoire: {
-    name: 'Grimoire', brand: 'Grimoire des Hauts Faits', xp: 'renommée',
-    types: { task: 'Exploit', goal: 'Quête', challenge: 'Légende' },
-    toasts: { task: 'Exploit consigné', goal: 'Quête achevée', challenge: 'Légende forgée' },
-  },
-  donjon: {
-    name: 'Donjon', brand: 'Hauts Faits', xp: 'âmes',
-    types: { task: 'Exploit', goal: 'Quête', challenge: 'Épreuve' },
-    toasts: { task: 'Haut fait accompli', goal: 'Quête achevée', challenge: 'Épreuve surmontée' },
-  },
   arcanes: {
     name: 'Arcanes', brand: 'Arcanes du Destin', xp: 'essence',
     types: { task: 'Rune', goal: 'Sceau', challenge: 'Relique' },
     toasts: { task: 'Rune éveillée', goal: 'Sceau brisé', challenge: 'Relique obtenue' },
   },
 };
-const T = () => THEMES[st.theme] || THEMES.donjon;
+const T = () => THEMES[st.theme] || THEMES.arcanes;
 const PICKS = '🏆⭐🔥💪🏃🚴🏊🧗🤸⛷️🏄🥊⚽🏀🎾🏐🧘🎯🏔️🌍✈️🎒⛺🎨📷🎬🎸🎤💻📚🧠🗣️🍳❤️🤝🎉💰🏢🔧🌱💧😴🐉🌟🎮🛸🚀'.match(/\p{Extended_Pictographic}️?/gu);
 
 const $ = s => document.querySelector(s);
@@ -39,9 +30,9 @@ function blank() {
     notes: {},      // id -> texte
     hidden: {},     // id -> true (branche "pas pour moi")
     custom: [],     // nœuds perso { id, tab, parent, icon, title, desc, type, target, unit }
-    customTabs: [{ id: 'mes', title: 'Mes quêtes', icon: '⭐', color: '#4a3b6b', root: 'mes.root' }],
+    customTabs: [{ id: 'mes', title: 'Mes quêtes', icon: '⭐', color: '#8a5cff', root: 'mes.root' }],
     showHidden: false,
-    theme: 'donjon',
+    theme: 'arcanes',
     tab: null,
   };
 }
@@ -100,7 +91,7 @@ function levelOf(xp) { // chaque niveau coûte un peu plus que le précédent
 function applyTheme() {
   const q = new URLSearchParams(location.search).get('theme');
   if (q && THEMES[q]) st.theme = q;
-  if (!THEMES[st.theme]) st.theme = 'donjon';
+  if (!THEMES[st.theme]) st.theme = 'arcanes';
   document.documentElement.dataset.theme = st.theme;
   $('.brand span').textContent = T().brand;
   document.title = `${T().brand} — les trophées de ma vie`;
@@ -148,7 +139,7 @@ function renderTree() {
   if (nodes[t.root]) lay(t.root, 0);
 
   const ids = Object.keys(pos);
-  let html = '', outs = '', ins = '', maxX = 0, maxY = 0;
+  let html = '', outs = '', ins = '', flows = '', maxX = 0, maxY = 0;
   for (const id of ids) {
     const n = nodes[id], p = pos[id];
     maxX = Math.max(maxX, p.x + S); maxY = Math.max(maxY, p.y + S);
@@ -159,11 +150,12 @@ function renderTree() {
       const cls = (st.done[id] ? 'done' : st.done[n.parent] ? '' : 'locked') + (isHidden(id) ? ' dim' : '');
       outs += `<path class="out${isHidden(id) ? ' dim' : ''}" d="${d}"/>`;
       ins += `<path class="in ${cls}" d="${d}"/>`;
+      if (st.done[id]) flows += `<path class="flow" d="${d}"/>`;
     }
   }
   const svg = $('#links');
   svg.setAttribute('width', maxX + 10); svg.setAttribute('height', maxY + 10);
-  svg.innerHTML = outs + ins;
+  svg.innerHTML = outs + ins + flows;
   $('#nodes').innerHTML = html;
 
   const ns = tabNodes(t.id), d = ns.filter(n => st.done[n.id]).length;
@@ -190,7 +182,8 @@ function nodeHTML(n, p) {
 // ---------- Vue : pan / zoom ----------
 function applyView() {
   $('#viewport').style.transform = `translate(${view.x}px,${view.y}px) scale(${view.s})`;
-  $('#stage').style.backgroundPosition = `${view.x}px ${view.y}px`;
+  // seules les étoiles (1re couche) suivent le déplacement ; les nébuleuses restent fixes
+  $('#stage').style.backgroundPosition = `${view.x}px ${view.y}px, 0 0, 0 0`;
 }
 function centerView() {
   const stage = $('#stage'), W = stage.clientWidth, H = stage.clientHeight - 60; // 60 : place pour l'info en bas
@@ -298,6 +291,20 @@ function setDone(id, on) {
     }
   } else delete st.done[id];
   save(); render();
+  if (on) burst(id);
+}
+
+function burst(id) {
+  const el = document.querySelector(`#nodes .node[data-id="${CSS.escape(id)}"]`);
+  if (!el) return;
+  const b = document.createElement('div');
+  b.className = 'burst';
+  b.innerHTML = Array.from({ length: 12 }, (_, i) => {
+    const a = i / 12 * Math.PI * 2, r = 50 + Math.random() * 30;
+    return `<i style="--dx:${Math.cos(a) * r}px;--dy:${Math.sin(a) * r}px"></i>`;
+  }).join('');
+  el.appendChild(b);
+  setTimeout(() => b.remove(), 1000);
 }
 
 function setProgress(id, v) {
@@ -305,7 +312,7 @@ function setProgress(id, v) {
   v = Math.max(0, Math.round(v * 100) / 100 || 0);
   st.progress[id] = v;
   save();
-  if (n.target && v >= n.target && !st.done[id]) setDone(id, true);
+  if (n.target && v >= n.target && !st.done[id]) { modal.close(); setDone(id, true); }
   else render();
 }
 
@@ -322,14 +329,19 @@ let audio;
 function ding(type) {
   try {
     audio = audio || new (window.AudioContext || window.webkitAudioContext)();
-    const notes = type === 'challenge' ? [523, 659, 784, 1047, 1319] : [659, 988];
+    // carillon mystique : arpège mineur, sinus + écho
+    const notes = type === 'challenge' ? [440, 523, 659, 880, 1047, 1319] : type === 'goal' ? [523, 659, 988] : [659, 988];
+    const echo = audio.createDelay(), fb = audio.createGain(), out = audio.createGain();
+    echo.delayTime.value = 0.18; fb.gain.value = 0.35; out.gain.value = 1;
+    echo.connect(fb).connect(echo); echo.connect(out); out.connect(audio.destination);
     notes.forEach((f, i) => {
-      const o = audio.createOscillator(), g = audio.createGain(), t0 = audio.currentTime + i * 0.09;
-      o.type = 'square'; o.frequency.value = f;
+      const o = audio.createOscillator(), g = audio.createGain(), t0 = audio.currentTime + i * 0.11;
+      o.type = 'sine'; o.frequency.value = f;
       g.gain.setValueAtTime(0.0001, t0);
-      g.gain.exponentialRampToValueAtTime(0.06, t0 + 0.01);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.25);
-      o.connect(g).connect(audio.destination); o.start(t0); o.stop(t0 + 0.3);
+      g.gain.exponentialRampToValueAtTime(0.09, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.9);
+      o.connect(g); g.connect(audio.destination); g.connect(echo);
+      o.start(t0); o.stop(t0 + 1);
     });
   } catch (e) { /* pas de son, tant pis */ }
 }
@@ -383,15 +395,17 @@ function openNode(id) {
                  : `<button type="button" id="b-hide" class="mc">${st.hidden[id] ? '👁 Réafficher' : '🚫 Pas pour moi'}</button>`}
     </div>`,
   m => {
-    m.querySelector('#b-toggle').onclick = () => { setDone(id, !done); openNode(id); };
+    m.querySelector('#b-toggle').onclick = () => { if (done) { setDone(id, false); openNode(id); } else { modal.close(); setDone(id, true); } };
     m.querySelector('#b-add').onclick = () => openForm({ parent: id, tab: n.tab });
     m.querySelector('#f-note').oninput = e => { const v = e.target.value.trim(); if (v) st.notes[id] = e.target.value; else delete st.notes[id]; save(); };
     const date = m.querySelector('#f-date');
     if (date) date.onchange = e => { if (e.target.value) { st.done[id] = e.target.value; save(); } };
     const pf = m.querySelector('#f-prog');
     if (pf) {
-      pf.onchange = () => { setProgress(id, +pf.value); openNode(id); };
-      m.querySelectorAll('[data-step]').forEach(b => b.onclick = () => { setProgress(id, (st.progress[id] || 0) + +b.dataset.step); openNode(id); });
+      // si le compteur débloque le nœud, la fenêtre se ferme pour laisser voir l'éclat
+      const step = v => { const was = st.done[id]; setProgress(id, v); if (was || !st.done[id]) openNode(id); };
+      pf.onchange = () => step(+pf.value);
+      m.querySelectorAll('[data-step]').forEach(b => b.onclick = () => step((st.progress[id] || 0) + +b.dataset.step));
     }
     const hide = m.querySelector('#b-hide');
     if (hide) hide.onclick = () => { if (st.hidden[id]) delete st.hidden[id]; else st.hidden[id] = true; save(); render(); modal.close(); };
@@ -505,7 +519,7 @@ function openMenu() {
                      : '<p class="muted">Rien encore… va débloquer ton premier progrès !</p>'}
     <h3>📊 Par onglet</h3>${stats}
     <h3>⚙️ Réglages</h3>
-    <label>Thème <select id="f-theme">${Object.entries(THEMES).map(([k, v]) => `<option value="${k}" ${st.theme === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select></label>
+    ${Object.keys(THEMES).length > 1 ? `<label>Thème <select id="f-theme">${Object.entries(THEMES).map(([k, v]) => `<option value="${k}" ${st.theme === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select></label>` : ''}
     <label><input type="checkbox" id="f-showhidden" ${st.showHidden ? 'checked' : ''}> Afficher les branches masquées (« pas pour moi »)</label>
     <h3>💾 Sauvegarde</h3>
     <p class="muted">Ta progression est stockée dans ce navigateur. Exporte-la pour la sauvegarder ou la passer sur un autre appareil.</p>
@@ -520,7 +534,8 @@ function openMenu() {
       const li = e.target.closest('li'); if (!li) return;
       st.tab = nodes[li.dataset.id].tab; save(); render(); centerView(); openNode(li.dataset.id);
     });
-    m.querySelector('#f-theme').onchange = e => { st.theme = e.target.value; history.replaceState(null, '', location.pathname); save(); render(); openMenu(); };
+    const th = m.querySelector('#f-theme');
+    if (th) th.onchange = e => { st.theme = e.target.value; history.replaceState(null, '', location.pathname); save(); render(); openMenu(); };
     m.querySelector('#f-showhidden').onchange = e => { st.showHidden = e.target.checked; save(); render(); };
     m.querySelector('#b-export').onclick = () => {
       const a = document.createElement('a');

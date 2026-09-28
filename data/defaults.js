@@ -6,7 +6,7 @@
 
 window.DEFAULT_TABS = [
   {
-    id: 'sport', title: 'Sport', icon: '🏃', color: '#3d6b35',
+    id: 'sport', title: 'Sport', icon: '🏃', color: '#2fae6a',
     tree: {
       id: 'sp.root', icon: '👟', title: 'Bouger son corps', desc: 'Faire une vraie séance de sport. Le début de tout.',
       children: [
@@ -59,7 +59,7 @@ window.DEFAULT_TABS = [
   },
 
   {
-    id: 'parkour', title: 'Parkour', icon: '🧗', color: '#5a4a3a',
+    id: 'parkour', title: 'Parkour', icon: '🧗', color: '#d0802a',
     tree: {
       id: 'pk.root', icon: '🏙️', title: 'La ville est un terrain de jeu', desc: 'Faire ta première session de parkour dehors.',
       children: [
@@ -105,7 +105,7 @@ window.DEFAULT_TABS = [
   },
 
   {
-    id: 'aventure', title: 'Aventure', icon: '🧭', color: '#2f5f73',
+    id: 'aventure', title: 'Aventure', icon: '🧭', color: '#2f8fd0',
     tree: {
       id: 'av.root', icon: '🎒', title: 'Sac sur le dos', desc: 'Partir quelque part juste pour découvrir.',
       children: [
@@ -143,7 +143,7 @@ window.DEFAULT_TABS = [
   },
 
   {
-    id: 'creation', title: 'Création', icon: '🎨', color: '#6b3d5e',
+    id: 'creation', title: 'Création', icon: '🎨', color: '#c040a8',
     tree: {
       id: 'cr.root', icon: '✏️', title: 'Créer un truc', desc: 'Finir un projet créatif, peu importe lequel.',
       children: [
@@ -186,7 +186,7 @@ window.DEFAULT_TABS = [
   },
 
   {
-    id: 'esprit', title: 'Esprit', icon: '🧠', color: '#3b4a7a',
+    id: 'esprit', title: 'Esprit', icon: '🧠', color: '#6a5ff0',
     tree: {
       id: 'es.root', icon: '💡', title: 'Curiosité', desc: 'Apprendre quelque chose de nouveau juste parce que.',
       children: [
@@ -223,7 +223,7 @@ window.DEFAULT_TABS = [
   },
 
   {
-    id: 'social', title: 'Social', icon: '❤️', color: '#7a3b3b',
+    id: 'social', title: 'Social', icon: '❤️', color: '#d8404f',
     tree: {
       id: 'so.root', icon: '🤗', title: 'Pas tout seul', desc: 'Faire quelque chose de sympa pour quelqu\'un, sans raison.',
       children: [
@@ -247,7 +247,7 @@ window.DEFAULT_TABS = [
   },
 
   {
-    id: 'vie', title: 'Vie & Pro', icon: '💼', color: '#5e5a2f',
+    id: 'vie', title: 'Vie & Pro', icon: '💼', color: '#d0a830',
     tree: {
       id: 'vi.root', icon: '📇', title: 'Adulte certifié', desc: 'Gérer un truc administratif chiant sans procrastiner.',
       children: [
@@ -280,7 +280,7 @@ window.DEFAULT_TABS = [
   },
 
   {
-    id: 'sante', title: 'Santé', icon: '🌿', color: '#2f6b5a',
+    id: 'sante', title: 'Santé', icon: '🌿', color: '#2fc0a0',
     tree: {
       id: 'sa.root', icon: '🌱', title: 'Prendre soin de soi', desc: 'Décider de faire attention à ta santé.',
       children: [
