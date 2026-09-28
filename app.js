@@ -3,8 +3,25 @@
 const KEY = 'progres.v1';
 const S = 52, COLW = 118, ROWH = 82;
 const XP = { task: 10, goal: 25, challenge: 50 };
-const TYPE_LABEL = { task: 'Progrès', goal: 'Objectif', challenge: 'Défi' };
-const TOAST_TITLE = { task: 'Progrès réalisé !', goal: 'Objectif atteint !', challenge: 'Défi relevé !' };
+// Thèmes : l'habillage (CSS dans themes.css) + le vocabulaire qui va avec
+const THEMES = {
+  grimoire: {
+    name: 'Grimoire', brand: 'Grimoire des Hauts Faits', xp: 'renommée',
+    types: { task: 'Exploit', goal: 'Quête', challenge: 'Légende' },
+    toasts: { task: 'Exploit consigné', goal: 'Quête achevée', challenge: 'Légende forgée' },
+  },
+  donjon: {
+    name: 'Donjon', brand: 'Hauts Faits', xp: 'âmes',
+    types: { task: 'Exploit', goal: 'Quête', challenge: 'Épreuve' },
+    toasts: { task: 'Haut fait accompli', goal: 'Quête achevée', challenge: 'Épreuve surmontée' },
+  },
+  arcanes: {
+    name: 'Arcanes', brand: 'Arcanes du Destin', xp: 'essence',
+    types: { task: 'Rune', goal: 'Sceau', challenge: 'Relique' },
+    toasts: { task: 'Rune éveillée', goal: 'Sceau brisé', challenge: 'Relique obtenue' },
+  },
+};
+const T = () => THEMES[st.theme] || THEMES.donjon;
 const PICKS = '🏆⭐🔥💪🏃🚴🏊🧗🤸⛷️🏄🥊⚽🏀🎾🏐🧘🎯🏔️🌍✈️🎒⛺🎨📷🎬🎸🎤💻📚🧠🗣️🍳❤️🤝🎉💰🏢🔧🌱💧😴🐉🌟🎮🛸🚀'.match(/\p{Extended_Pictographic}️?/gu);
 
 const $ = s => document.querySelector(s);
@@ -24,6 +41,7 @@ function blank() {
     custom: [],     // nœuds perso { id, tab, parent, icon, title, desc, type, target, unit }
     customTabs: [{ id: 'mes', title: 'Mes quêtes', icon: '⭐', color: '#4a3b6b', root: 'mes.root' }],
     showHidden: false,
+    theme: 'donjon',
     tab: null,
   };
 }
@@ -79,7 +97,17 @@ function levelOf(xp) { // chaque niveau coûte un peu plus que le précédent
 }
 
 // ---------- Rendu ----------
+function applyTheme() {
+  const q = new URLSearchParams(location.search).get('theme');
+  if (q && THEMES[q]) st.theme = q;
+  if (!THEMES[st.theme]) st.theme = 'donjon';
+  document.documentElement.dataset.theme = st.theme;
+  $('.brand span').textContent = T().brand;
+  document.title = `${T().brand} — les trophées de ma vie`;
+}
+
 function render() {
+  applyTheme();
   renderTabs();
   renderTree();
   renderXP();
@@ -91,7 +119,7 @@ function renderXP() {
   const done = all.filter(n => st.done[n.id]).length;
   $('#lvl').textContent = lvl;
   $('#xpfill').style.width = (cur / need * 100) + '%';
-  $('#xptext').textContent = `${xp} XP · ${done}/${all.length} débloqués`;
+  $('#xptext').textContent = `${xp} ${T().xp} · ${done}/${all.length} débloqués`;
 }
 
 function renderTabs() {
@@ -284,7 +312,7 @@ function setProgress(id, v) {
 function toast(n, header) {
   const el = document.createElement('div');
   el.className = `toast ${n.type}`;
-  el.innerHTML = `<div class="t-ic">${esc(n.icon)}</div><div><div class="t-h">${esc(header || TOAST_TITLE[n.type])}</div><div class="t-t">${esc(n.title)}</div></div>`;
+  el.innerHTML = `<div class="t-ic">${esc(n.icon)}</div><div><div class="t-h">${esc(header || T().toasts[n.type])}</div><div class="t-t">${esc(n.title)}</div></div>`;
   $('#toasts').appendChild(el);
   setTimeout(() => el.remove(), 4800);
   ding(n.type);
@@ -330,7 +358,7 @@ function openNode(id) {
     <div class="head">
       ${nodeHTML(n)}
       <div>
-        <div class="kind ${n.type}">${TYPE_LABEL[n.type]} · ${XP[n.type]} XP${n.custom ? ' · perso' : ''}</div>
+        <div class="kind ${n.type}">${T().types[n.type]} · ${XP[n.type]} ${T().xp}${n.custom ? ' · perso' : ''}</div>
         <h2>${esc(n.title)}</h2>
         <div class="crumbs">${esc(t.icon)} ${esc([t.title, ...crumbs].join(' › '))}</div>
       </div>
@@ -401,7 +429,7 @@ function openForm({ parent, tab, edit }) {
     <label>Description / condition<textarea id="f-desc" placeholder="Ce qu'il faut faire exactement">${esc(n.desc)}</textarea></label>
     <label>Type
       <select id="f-type">
-        ${Object.keys(TYPE_LABEL).map(k => `<option value="${k}" ${n.type === k ? 'selected' : ''}>${TYPE_LABEL[k]} (${XP[k]} XP)</option>`).join('')}
+        ${Object.keys(XP).map(k => `<option value="${k}" ${n.type === k ? 'selected' : ''}>${T().types[k]} (${XP[k]} ${T().xp})</option>`).join('')}
       </select></label>
     <div class="grid2">
       <label>Compteur (optionnel)<input type="number" id="f-target" min="0" value="${n.target || ''}" placeholder="Ex. 100"></label>
@@ -477,6 +505,7 @@ function openMenu() {
                      : '<p class="muted">Rien encore… va débloquer ton premier progrès !</p>'}
     <h3>📊 Par onglet</h3>${stats}
     <h3>⚙️ Réglages</h3>
+    <label>Thème <select id="f-theme">${Object.entries(THEMES).map(([k, v]) => `<option value="${k}" ${st.theme === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select></label>
     <label><input type="checkbox" id="f-showhidden" ${st.showHidden ? 'checked' : ''}> Afficher les branches masquées (« pas pour moi »)</label>
     <h3>💾 Sauvegarde</h3>
     <p class="muted">Ta progression est stockée dans ce navigateur. Exporte-la pour la sauvegarder ou la passer sur un autre appareil.</p>
@@ -491,6 +520,7 @@ function openMenu() {
       const li = e.target.closest('li'); if (!li) return;
       st.tab = nodes[li.dataset.id].tab; save(); render(); centerView(); openNode(li.dataset.id);
     });
+    m.querySelector('#f-theme').onchange = e => { st.theme = e.target.value; history.replaceState(null, '', location.pathname); save(); render(); openMenu(); };
     m.querySelector('#f-showhidden').onchange = e => { st.showHidden = e.target.checked; save(); render(); };
     m.querySelector('#b-export').onclick = () => {
       const a = document.createElement('a');

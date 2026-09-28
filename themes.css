@@ -1,0 +1,189 @@
+/* =====================================================================
+   Thèmes dark fantasy en pixel art.
+   Chaque thème ne fait que définir des variables ; l'habillage commun
+   (formes pixel, contours, polices) est plus bas.
+   ===================================================================== */
+
+/* ---------- 1. Grimoire : parchemin, cuir et cire rouge ---------- */
+html[data-theme=grimoire] {
+  --void: #120b07; --outline: #1a0f08; --edge: #6b4a26;
+  --bar: #2a1a10; --bar-ink: #e2cfa1; --title: #e9c46a; --muted: #a88a5f;
+  --accent: #e0b050; --accent2: #c9302c; --xp: linear-gradient(#e0504a, #8e1b1b);
+  --tab-bg: #3a2616; --tab-active: #5e3d20;
+  --stage:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' shape-rendering='crispEdges'%3E%3Cg fill='%238a6a3a' fill-opacity='.18'%3E%3Crect x='3' y='5' width='2' height='2'/%3E%3Crect x='19' y='11' width='2' height='2'/%3E%3Crect x='9' y='23' width='2' height='2'/%3E%3Crect x='27' y='27' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 64px 64px,
+    radial-gradient(ellipse at 50% 45%, #e3cf9f 0%, #d2b884 60%, #b8975e 100%);
+  --vignette: inset 0 0 0 4px #3a2212, inset 0 0 120px 40px rgba(70, 30, 5, .8);
+  --panel: #e4d2a4; --panel2: #d6bf8f; --panel-ink: #2b1a0f; --title-panel: #7a1414;
+  --field: #f3e8cb; --hover: rgba(122, 20, 20, .12); --good: #2f5a1a; --muted-panel: #6b5030;
+  --btn: #5a3a20; --btn-hi: #8a5e34; --btn-lo: #2e1c0e; --btn-ink: #f0dfb0;
+  --accent-bg: #8e1b1b; --accent-ink: #fff0d0; --danger: #3a1010;
+  --n-bg: #eadbb3; --n-hi: #fff5d8; --n-lo: #b89a66;
+  --d-bg: #8e1b1b; --d-hi: #d0463e; --d-lo: #4e0a0a;
+  --glow: rgba(160, 20, 10, .55); --avail-glow: rgba(90, 50, 10, .45);
+  --ic-off: sepia(1) saturate(.5) brightness(.85) contrast(1.1); --ic-on: sepia(.25) saturate(1.2);
+  --line: #8a6a3a; --line-done: #9e1f1f; --line-locked: #b39a70;
+  --info-ink: #3b2414; --info-shadow: #e9d8ad;
+}
+
+/* ---------- 2. Donjon : pierre, fer et braises ---------- */
+html[data-theme=donjon] {
+  --void: #070608; --outline: #050406; --edge: #3e3a46;
+  --bar: #121116; --bar-ink: #cfc6b8; --title: #e8c070; --muted: #7d7688;
+  --accent: #ff9a3c; --accent2: #ff5a2e; --xp: linear-gradient(#ffd56a, #e0561a);
+  --tab-bg: #1b1a20; --tab-active: #2c2932;
+  --stage:
+    radial-gradient(ellipse at 50% 35%, rgba(255, 130, 40, .16), transparent 55%) 0 0 / 100% 100% no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' shape-rendering='crispEdges'%3E%3Crect width='48' height='48' fill='%231c1a21'/%3E%3Cg fill='%230b0a0e'%3E%3Crect width='48' height='3'/%3E%3Crect y='24' width='48' height='3'/%3E%3Crect width='3' height='24'/%3E%3Crect x='24' y='24' width='3' height='24'/%3E%3C/g%3E%3Cg fill='%2326242c'%3E%3Crect x='3' y='3' width='21' height='3'/%3E%3Crect x='27' y='3' width='18' height='3'/%3E%3Crect x='3' y='27' width='21' height='3'/%3E%3Crect x='27' y='27' width='21' height='3'/%3E%3C/g%3E%3Cg fill='%23141318'%3E%3Crect x='9' y='15' width='3' height='3'/%3E%3Crect x='36' y='12' width='3' height='3'/%3E%3Crect x='15' y='39' width='3' height='3'/%3E%3Crect x='40' y='36' width='3' height='3'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 96px 96px;
+  --vignette: inset 0 0 180px 50px rgba(0, 0, 0, .92);
+  --panel: #1c1a21; --panel2: #131217; --panel-ink: #d8cfc0; --title-panel: #e8c070;
+  --field: #0c0b0f; --hover: rgba(255, 154, 60, .1); --good: #ff9a3c; --muted-panel: #8a8394;
+  --btn: #2e2b34; --btn-hi: #4a4652; --btn-lo: #17151b; --btn-ink: #e0d6c6;
+  --accent-bg: #8a3a12; --accent-ink: #ffe0b0; --danger: #5a1414;
+  --n-bg: #2c2a31; --n-hi: #4a4652; --n-lo: #151419;
+  --d-bg: #6a280a; --d-hi: #ff9a3c; --d-lo: #2a0e03;
+  --glow: rgba(255, 120, 30, .9); --avail-glow: rgba(255, 190, 110, .28);
+  --ic-off: grayscale(1) brightness(.7); --ic-on: saturate(1.1);
+  --line: #3a3742; --line-done: #ff8a2a; --line-locked: #232128;
+  --info-ink: #e8c070; --info-shadow: #000;
+}
+
+/* ---------- 3. Arcanes : nuit, runes et feu d'âme ---------- */
+html[data-theme=arcanes] {
+  --void: #05040d; --outline: #020108; --edge: #2e2760;
+  --bar: #0c0a1c; --bar-ink: #cfc8ff; --title: #c9b6ff; --muted: #6e67a0;
+  --accent: #6ff7e8; --accent2: #d68cff; --xp: linear-gradient(#a8fff6, #7a4dff);
+  --tab-bg: #121030; --tab-active: #211b50;
+  --stage:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' shape-rendering='crispEdges'%3E%3Cg fill='%23fff'%3E%3Crect x='10' y='14' width='2' height='2'/%3E%3Crect x='70' y='8' width='2' height='2' fill-opacity='.6'/%3E%3Crect x='44' y='52' width='2' height='2' fill-opacity='.8'/%3E%3Crect x='84' y='70' width='2' height='2' fill-opacity='.5'/%3E%3C/g%3E%3Cg fill='%236ff7e8'%3E%3Crect x='28' y='80' width='2' height='2'/%3E%3Crect x='60' y='30' width='2' height='2' fill-opacity='.6'/%3E%3C/g%3E%3Cg fill='%23d68cff'%3E%3Crect x='20' y='44' width='2' height='2' fill-opacity='.7'/%3E%3Crect x='88' y='22' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 192px 192px,
+    radial-gradient(ellipse at 25% 30%, rgba(122, 77, 255, .22), transparent 50%) 0 0 / 100% 100% no-repeat,
+    radial-gradient(ellipse at 75% 70%, rgba(40, 200, 190, .14), transparent 50%) 0 0 / 100% 100% no-repeat,
+    #0a0918;
+  --vignette: inset 0 0 160px 40px rgba(0, 0, 0, .85);
+  --panel: #14112b; --panel2: #0d0b20; --panel-ink: #d9d3ff; --title-panel: #6ff7e8;
+  --field: #07061a; --hover: rgba(111, 247, 232, .08); --good: #6ff7e8; --muted-panel: #8a83c0;
+  --btn: #231d52; --btn-hi: #3d3585; --btn-lo: #110e2c; --btn-ink: #e0dbff;
+  --accent-bg: #1f6f78; --accent-ink: #e9fffd; --danger: #5a1440;
+  --n-bg: #1a1636; --n-hi: #342c6e; --n-lo: #0b0920;
+  --d-bg: #0f4f58; --d-hi: #6ff7e8; --d-lo: #06262a;
+  --glow: rgba(90, 255, 240, .9); --avail-glow: rgba(180, 140, 255, .5);
+  --ic-off: grayscale(1) brightness(.6); --ic-on: none;
+  --line: #2e2760; --line-done: #6ff7e8; --line-locked: #1b1740;
+  --info-ink: #c9b6ff; --info-shadow: #000;
+}
+
+/* =====================================================================
+   Habillage commun
+   ===================================================================== */
+html[data-theme] {
+  --px: 0 -3px 0 var(--outline), 0 3px 0 var(--outline), -3px 0 0 var(--outline), 3px 0 0 var(--outline);
+  --shape-task: polygon(0 6px, 6px 6px, 6px 0, calc(100% - 6px) 0, calc(100% - 6px) 6px, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 6px calc(100% - 6px), 0 calc(100% - 6px));
+  --shape-goal: polygon(0 0, 100% 0, 100% 60%, 88% 60%, 88% 76%, 76% 76%, 76% 88%, 60% 88%, 60% 100%, 40% 100%, 40% 88%, 24% 88%, 24% 76%, 12% 76%, 12% 60%, 0 60%);
+  --shape-chal: polygon(38% 0, 62% 0, 62% 12%, 76% 12%, 76% 24%, 88% 24%, 88% 38%, 100% 38%, 100% 62%, 88% 62%, 88% 76%, 76% 76%, 76% 88%, 62% 88%, 62% 100%, 38% 100%, 38% 88%, 24% 88%, 24% 76%, 12% 76%, 12% 62%, 0 62%, 0 38%, 12% 38%, 12% 24%, 24% 24%, 24% 12%, 38% 12%);
+}
+html[data-theme] body { font-family: 'Pixelify Sans', 'VT323', monospace; font-size: 17px; background: var(--void); color: var(--panel-ink); }
+html[data-theme] .brand, html[data-theme] .card h2, html[data-theme] .card h3, html[data-theme] #tabinfo b,
+html[data-theme] #hover .h-title, html[data-theme] .toast .t-h, html[data-theme] #lvl { font-family: 'Jacquard 24', serif; font-weight: normal; }
+
+/* Barre du haut & onglets */
+html[data-theme] #topbar { background: var(--bar); color: var(--bar-ink); border-bottom: 3px solid var(--outline); }
+html[data-theme] .brand { font-size: 34px; color: var(--title); text-shadow: 3px 3px 0 var(--outline); }
+html[data-theme] #lvl { color: var(--accent); font-size: 38px; text-shadow: 3px 3px 0 var(--outline); }
+html[data-theme] .xpbar { height: 9px; border: none; background: var(--outline); box-shadow: 0 0 0 3px var(--outline), 0 0 0 6px var(--edge); margin: 0 6px; }
+html[data-theme] #xpfill { background: var(--xp); }
+html[data-theme] #xptext { color: var(--muted); font-size: 16px; }
+html[data-theme] #tabs { background: var(--bar); padding-top: 8px; gap: 6px; }
+html[data-theme] .tab {
+  background: var(--tab-bg); color: var(--muted); border: none; margin: 3px 0 0;
+  box-shadow: inset 0 3px 0 var(--edge), inset 3px 0 0 var(--edge), inset -3px 0 0 var(--edge);
+  clip-path: polygon(0 3px, 3px 3px, 3px 0, calc(100% - 3px) 0, calc(100% - 3px) 3px, 100% 3px, 100% 100%, 0 100%);
+}
+html[data-theme] .tab .t-name { font-size: 15px; }
+html[data-theme] .tab.active {
+  background: var(--tab-active); color: var(--title); text-shadow: 2px 2px 0 var(--outline);
+  box-shadow: inset 0 3px 0 var(--accent), inset 3px 0 0 var(--edge), inset -3px 0 0 var(--edge);
+}
+html[data-theme] .tab .t-pct { background: var(--outline); height: 3px; }
+html[data-theme] .tab .t-pct i { background: var(--accent); }
+
+/* Scène */
+html[data-theme] #stage { background: var(--stage); border-top: 3px solid var(--outline); }
+html[data-theme] #stage::after { box-shadow: var(--vignette); }
+html[data-theme] #tabinfo { color: var(--info-ink); text-shadow: 3px 3px 0 var(--info-shadow); font-size: 16px; }
+html[data-theme] #tabinfo b { font-size: 40px; line-height: 1; }
+
+/* Boutons */
+html[data-theme] .mc, html[data-theme] .mc:hover {
+  background: var(--btn); color: var(--btn-ink); text-shadow: 2px 2px 0 var(--outline);
+  border: none; margin: 3px;
+  box-shadow: var(--px), inset 3px 3px 0 var(--btn-hi), inset -3px -3px 0 var(--btn-lo);
+}
+html[data-theme] .mc:hover { filter: brightness(1.25); }
+html[data-theme] .mc.primary { background: var(--accent-bg); color: var(--accent-ink); }
+html[data-theme] .mc.danger { background: var(--danger); }
+
+/* Liens de l'arbre */
+html[data-theme] #links .out { stroke: var(--outline); stroke-width: 7; }
+html[data-theme] #links .in { stroke: var(--line); stroke-width: 3; }
+html[data-theme] #links .in.done { stroke: var(--line-done); filter: drop-shadow(0 0 4px var(--glow)); }
+html[data-theme] #links .in.locked { stroke: var(--line-locked); stroke-dasharray: 6 6; }
+
+/* Nœuds : formes pixel + contour noir + halo */
+html[data-theme] .node {
+  --ol: drop-shadow(3px 0 0 var(--outline)) drop-shadow(-3px 0 0 var(--outline)) drop-shadow(0 3px 0 var(--outline)) drop-shadow(0 -3px 0 var(--outline));
+  filter: var(--ol); transition: transform .12s;
+}
+html[data-theme] .node.avail { filter: var(--ol) drop-shadow(0 0 6px var(--avail-glow)); }
+html[data-theme] .node.done { filter: var(--ol) drop-shadow(0 0 10px var(--glow)); }
+html[data-theme] .node:hover { transform: translateY(-3px); }
+html[data-theme] .node:hover .frame { transform: none; }
+html[data-theme] .node.challenge::before { display: none; }
+html[data-theme] .node .frame {
+  border: none; border-radius: 0; clip-path: var(--shape-task);
+  background: var(--n-bg); box-shadow: inset 3px 3px 0 var(--n-hi), inset -3px -3px 0 var(--n-lo);
+}
+html[data-theme] .node.goal .frame { clip-path: var(--shape-goal); padding-bottom: 8px; }
+html[data-theme] .node.challenge .frame { clip-path: var(--shape-chal); width: 60px; height: 60px; margin: -4px; font-size: 24px; }
+html[data-theme] .node.done .frame { background: var(--d-bg); box-shadow: inset 3px 3px 0 var(--d-hi), inset -3px -3px 0 var(--d-lo); }
+html[data-theme] .node .ic { filter: var(--ic-off); }
+html[data-theme] .node.done .ic { filter: var(--ic-on); }
+html[data-theme] .node.locked { opacity: .5; }
+html[data-theme] .node.locked .ic { filter: var(--ic-off) brightness(.7); opacity: 1; }
+html[data-theme] .node .bar { border: none; background: var(--outline); box-shadow: 0 0 0 3px var(--outline); height: 6px; top: 60px; }
+html[data-theme] .node .bar i { background: var(--xp); }
+
+/* Infobulle */
+html[data-theme] #hover { text-shadow: none; }
+html[data-theme] #hover .h-title { background: var(--panel); color: var(--title-panel); border: none; box-shadow: var(--px); font-size: 26px; padding: 2px 10px; }
+html[data-theme] #hover.done .h-title { background: var(--d-bg); color: #fff; }
+html[data-theme] #hover .h-desc { background: var(--panel2); color: var(--panel-ink); border: none; box-shadow: var(--px); margin-top: 3px; font-size: 16px; }
+html[data-theme] #hover .h-desc small { color: var(--muted-panel); }
+
+/* Notifications */
+html[data-theme] .toast {
+  background: var(--panel); color: var(--panel-ink); border: none; border-radius: 0;
+  box-shadow: 0 0 0 3px var(--edge), 0 0 0 6px var(--outline), 0 10px 30px #000;
+}
+html[data-theme] .toast .t-h { color: var(--title-panel); font-size: 26px; line-height: 1; }
+html[data-theme] .toast.challenge .t-h { color: var(--accent2); }
+html[data-theme] .toast .t-t { font-size: 18px; }
+
+/* Fenêtres */
+html[data-theme] dialog {
+  background: var(--panel); color: var(--panel-ink); border: none;
+  box-shadow: 0 0 0 3px var(--edge), 0 0 0 6px var(--outline), 0 20px 60px #000;
+}
+html[data-theme] .card h2 { font-size: 38px; color: var(--title-panel); }
+html[data-theme] .card h3 { font-size: 28px; color: var(--title-panel); border-bottom: 3px solid var(--edge); }
+html[data-theme] .card .kind, html[data-theme] .card .crumbs, html[data-theme] .card .muted, html[data-theme] .card .journal .d { color: var(--muted-panel); font-size: 15px; }
+html[data-theme] .card .kind.challenge { color: var(--accent2); }
+html[data-theme] .card .desc { font-size: 19px; }
+html[data-theme] .card .ok { color: var(--good); }
+html[data-theme] .card input[type=text], html[data-theme] .card input[type=number], html[data-theme] .card input[type=date],
+html[data-theme] .card textarea, html[data-theme] .card select {
+  background: var(--field); color: var(--panel-ink); border: 3px solid var(--edge); color-scheme: normal;
+}
+html[data-theme=donjon] .card input, html[data-theme=arcanes] .card input { color-scheme: dark; }
+html[data-theme] .card .journal li:hover, html[data-theme] .card .picks span:hover { background: var(--hover); }
+html[data-theme] .card .counter .bigbar, html[data-theme] .card .stat .bigbar { border: none; background: var(--outline); box-shadow: 0 0 0 3px var(--outline); }
+html[data-theme] .card .counter .bigbar i, html[data-theme] .card .stat .bigbar i { background: var(--xp); }
