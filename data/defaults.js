@@ -235,11 +235,51 @@ window.DEFAULT_TABS = [
         { id: 'av.adrenaline', icon: '⚡', title: 'Sensations', desc: 'Faire une activité à sensations (rafting, canyoning…).', children: [
           { id: 'av.parapente', icon: '🪂', title: 'Voler', desc: 'Faire du parapente.', type: 'goal' },
           { id: 'av.skydive', icon: '🛩️', title: 'Chute libre', desc: 'Sauter en parachute.', type: 'challenge' },
-          { id: 'av.dive', icon: '🤿', title: 'Grand bleu', desc: 'Faire un baptême de plongée.', type: 'goal', children: [
-            { id: 'av.diver', icon: '🐠', title: 'Plongeur', desc: 'Obtenir un niveau de plongée (N1 / Open Water).', type: 'challenge' },
-          ] },
         ] },
         { id: 'av.aurora', icon: '🌠', title: 'Ciel vivant', desc: 'Voir une aurore boréale.', type: 'challenge' },
+      ],
+    },
+  },
+
+  // =====================================================================
+  {
+    id: 'eau', title: 'Eau', icon: '🌊', color: '#1fa0c0',
+    tree: {
+      id: 'ea.root', icon: '⚓', title: 'L\'appel du large', desc: 'Passer une journée entière en mer.',
+      children: [
+        // ---------- Voile ----------
+        { id: 'ea.voile', icon: '⛵', title: 'Voile', desc: 'Première navigation en voilier.', children: [
+          { id: 'ea.barre', icon: '☸️', title: 'À la barre', desc: 'Savoir barrer et régler les voiles (stage ou apprentissage à bord).', children: [
+            { id: 'ea.night', icon: '🌙', title: 'Quart de nuit', desc: 'Naviguer de nuit et tenir un quart.', type: 'goal', children: [
+              { id: 'ea.crossing', icon: '🧭', title: 'Traversée', desc: 'Une traversée de plusieurs jours sans voir la terre.', type: 'goal', children: [
+                { id: 'ea.transat', icon: '🌎', title: 'Transatlantique', desc: 'Traverser l\'Atlantique en voilier.', type: 'challenge' },
+              ] },
+            ] },
+            { id: 'ea.skipper', icon: '👨‍✈️', title: 'Skipper', desc: 'Mener toi-même un bateau avec un équipage.', type: 'challenge' },
+          ] },
+        ] },
+
+        // ---------- Voyager en bateau ----------
+        { id: 'ea.boat', icon: '🛳️', title: 'Voyager en bateau', desc: 'Rejoindre un autre pays par la mer.', children: [
+          { id: 'ea.island', icon: '🏝️', title: 'Cap sur une île', desc: 'Rejoindre une île en bateau.' },
+          { id: 'ea.boatstop', icon: '👍', title: 'Bateau-stop', desc: 'Trouver une place d\'équipier sur un bateau en bateau-stop.', type: 'goal', children: [
+            { id: 'ea.cargo', icon: '🚢', title: 'Cargo', desc: 'Traverser un océan à bord d\'un cargo.', type: 'challenge' },
+          ] },
+        ] },
+
+        // ---------- Plongée ----------
+        { id: 'av.dive', icon: '🤿', title: 'Plongée', desc: 'Faire un baptême de plongée.', children: [
+          { id: 'av.diver', icon: '🐠', title: 'Plongeur', desc: 'Obtenir un niveau de plongée (N1 / Open Water).', type: 'challenge' },
+          { id: 'ea.apnee', icon: '🐬', title: 'Apnée', desc: 'Descendre à 10 m en apnée.', type: 'goal' },
+        ] },
+
+        // ---------- Glisse ----------
+        { id: 'ea.surf', icon: '🏄', title: 'Surf', desc: 'Te lever sur une planche de surf.', children: [
+          { id: 'ea.green', icon: '🌊', title: 'Vague verte', desc: 'Surfer une vague verte (non déferlée).', type: 'goal' },
+        ] },
+        { id: 'ea.kayak', icon: '🛶', title: 'Kayak de mer', desc: 'Faire une sortie en kayak de mer.', children: [
+          { id: 'ea.kayaktrip', icon: '🗺️', title: 'Raid kayak', desc: 'Un raid de plusieurs jours en kayak.', type: 'goal' },
+        ] },
       ],
     },
   },
