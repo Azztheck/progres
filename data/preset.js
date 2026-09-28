@@ -1,9 +1,9 @@
 // Hauts faits pré-remplis pour Noé (d'après Instagram et nos échanges).
 // Appliqués une fois par navigateur et par version, sans rien écraser ; ceux de `unverified`
-// apparaissent « à vérifier », ceux de `verified` sont confirmés.
+// apparaissent « à vérifier », ceux de `verified` sont confirmés ; `countries` coche la carte.
 // Incrémenter `version` pour pousser un nouveau lot.
 window.PRESET = {
- "version": 2,
+ "version": 3,
  "done": {
   "sp.root": "2024-10-28",
   "pk.root": "2024-10-28",
@@ -33,7 +33,6 @@ window.PRESET = {
   "vo.stop10k": "2026-09-23",
   "vo.border": "2026-09-23",
   "av.country": "2026-09-23",
-  "av.continent": "2026-09-28",
   "av.roadtrip": "2026-09-23",
   "vo.host": "2026-09-23",
   "cr.music": "2025-11-22",
@@ -80,10 +79,12 @@ window.PRESET = {
   "mu.sing": "2026-09-28",
   "es.lang2": "2026-09-28",
   "mo.2k": "2026-09-28",
-  "eu.root": "2026-09-28",
-  "eu.west": "2026-09-28",
-  "af.root": "2026-09-28",
-  "af.maghreb": "2026-09-28"
+  "gu.root": "2026-09-28",
+  "mu.stage": "2026-09-28",
+  "gu.barre": "2026-09-28",
+  "gu.rhythm": "2026-09-28",
+  "vx.overland": "2026-09-28",
+  "vx.zero": "2026-09-28"
  },
  "progress": {
   "vo.stop1k": 12093,
@@ -124,7 +125,6 @@ window.PRESET = {
   "vo.stop10k": "12 093 km en stop",
   "vo.border": "15 pays traversés en stop",
   "av.country": "Voyage en stop",
-  "av.continent": "Maroc (date à préciser)",
   "av.roadtrip": "Voyage en stop",
   "vo.host": "7 hébergements chez l'habitant",
   "cr.music": "Guitare",
@@ -171,10 +171,12 @@ window.PRESET = {
   "mu.sing": "Tu chantes un peu — à confirmer",
   "es.lang2": "Deviné (anglais courant) — à confirmer",
   "mo.2k": "Toubkal (date à préciser)",
-  "eu.root": "Lisbonne, Amsterdam, Angleterre, voyage en stop",
-  "eu.west": "Portugal, Pays-Bas, Angleterre — à confirmer",
-  "af.root": "Maroc (date à préciser)",
-  "af.maghreb": "Maroc, Toubkal (date à préciser)"
+  "gu.root": "Guitare",
+  "mu.stage": "Partage musical avec Sam",
+  "gu.barre": "Deviné (tu joues de la guitare) — à confirmer",
+  "gu.rhythm": "Deviné (tu joues de la guitare) — à confirmer",
+  "vx.overland": "Voyage en stop France → Finlande → Grèce — à confirmer",
+  "vx.zero": "Deviné (voyage en stop) — à confirmer"
  },
  "unverified": [
   "sp.root",
@@ -202,7 +204,6 @@ window.PRESET = {
   "av.root",
   "vo.border",
   "av.country",
-  "av.continent",
   "av.roadtrip",
   "vo.host",
   "mu.duo",
@@ -229,10 +230,11 @@ window.PRESET = {
   "mu.sing",
   "es.lang2",
   "mo.2k",
-  "eu.root",
-  "eu.west",
-  "af.root",
-  "af.maghreb"
+  "mu.stage",
+  "gu.barre",
+  "gu.rhythm",
+  "vx.overland",
+  "vx.zero"
  ],
  "verified": [
   "vo.stop",
@@ -257,6 +259,29 @@ window.PRESET = {
   "mu.instr2",
   "es.lang",
   "es.en",
-  "es.lang3"
- ]
+  "es.lang3",
+  "gu.root"
+ ],
+ "countries": {
+  "FR": "2026-09-23",
+  "DE": "2026-09-23",
+  "DK": "2026-09-23",
+  "SE": "2026-09-23",
+  "NO": "2026-09-23",
+  "FI": "2026-09-23",
+  "EE": "2026-09-23",
+  "RU": "2026-09-23",
+  "LT": "2026-09-23",
+  "LV": "2026-09-23",
+  "PL": "2026-09-23",
+  "SK": "2026-09-23",
+  "HU": "2026-09-23",
+  "RO": "2026-09-23",
+  "BG": "2026-09-23",
+  "GR": "2026-09-23",
+  "PT": "2026-09-28",
+  "NL": "2026-09-28",
+  "GB": "2026-09-28",
+  "MA": "2026-09-28"
+ }
 };

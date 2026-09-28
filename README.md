@@ -12,7 +12,8 @@ domaine (sport, parkour, aventure, création, esprit, social, vie & pro, santé�
 - **＋ Sous-objectif** sur n'importe quel bloc → ajoute ta propre branche (même sous les objectifs génériques).
 - **🚫 Pas pour moi** → masque une branche générique qui ne te concerne pas (réaffichable dans le menu).
 - **＋ Onglet** → crée un nouvel arbre pour un domaine perso.
-- **☰** → journal des déblocages, stats par onglet, export/import de la sauvegarde.
+- **🗺️ Carte** → clique les pays visités (ou « Liste des pays » pour chercher, y compris les micro-États).
+- **☰** → hauts faits à vérifier, journal, stats par onglet, export/import de la sauvegarde.
 - Glisser pour se déplacer, molette / pincer pour zoomer.
 
 Types de blocs :

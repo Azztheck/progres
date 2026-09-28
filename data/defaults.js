@@ -239,58 +239,30 @@ window.DEFAULT_TABS = [
               { id: 'vo.shanghai', icon: '🏯', title: 'Route de la Soie', desc: 'Rejoindre Shanghai en stop en partant de France. L\'objectif ultime.', type: 'challenge' },
             ] },
           ] },
-          { id: 'vo.cars', icon: '🚗', title: 'Cent conducteurs', desc: 'Monter dans 100 voitures différentes en stop.', type: 'goal', target: 100, unit: 'voitures', children: [
-            { id: 'vo.cars500', icon: '🚚', title: 'Cinq cents conducteurs', desc: 'Monter dans 500 voitures différentes en stop.', type: 'challenge', target: 500, unit: 'voitures' },
-          ] },
+          { id: 'vo.cars', icon: '🚗', title: 'Cent conducteurs', desc: 'Monter dans 100 voitures différentes en stop.', type: 'goal', target: 100, unit: 'voitures' },
           { id: 'vo.border', icon: '🛃', title: 'Sans frontières', desc: 'Passer une frontière en stop.' },
         ] },
 
         // ---------- Pays ----------
-        // ---------- Le monde, par régions (pas de décompte de pays) ----------
-        { id: 'av.country', icon: '🛂', title: 'Le monde', desc: 'Visiter un autre pays.', children: [
-          { id: 'eu.root', hub: true, icon: '🏰', title: 'Europe', desc: 'Voyager dans un autre pays d\'Europe.', children: [
-            { id: 'eu.west', icon: '🥐', title: 'Europe de l\'Ouest', desc: 'Parcourir l\'Europe de l\'Ouest : péninsule Ibérique, Benelux, îles Britanniques…' },
-            { id: 'eu.south', icon: '🍋', title: 'Méditerranée', desc: 'Parcourir l\'Italie, la Grèce et les îles de Méditerranée.' },
-            { id: 'eu.north', icon: '🛶', title: 'Scandinavie', desc: 'Parcourir la Norvège, la Suède, la Finlande ou le Danemark.', type: 'goal', children: [
-              { id: 'eu.iceland', icon: '🌋', title: 'Terre de feu et de glace', desc: 'Voyager en Islande.', type: 'goal' },
-            ] },
-            { id: 'eu.east', icon: '🏛️', title: 'Est & Balkans', desc: 'Parcourir l\'Europe de l\'Est et les Balkans.', type: 'goal' },
-            { id: 'eu.all', icon: '🇪🇺', title: 'Toute l\'Europe', desc: 'Avoir mis les pieds dans tous les pays de l\'Union européenne.', type: 'challenge' },
-            { id: 'eu.russia', icon: '🐻', title: 'Russie', desc: 'Voyager en Russie.', type: 'goal', children: [
-              { id: 'eu.transsib', icon: '🚂', title: 'Transsibérien', desc: 'Traverser la Russie par le Transsibérien.', type: 'challenge' },
-            ] },
-          ] },
-          { id: 'av.continent', icon: '🌏', title: 'Autre continent', desc: 'Mettre les pieds sur un autre continent.', type: 'goal' },
-          { id: 'af.root', hub: true, icon: '🦁', title: 'Afrique', desc: 'Voyager en Afrique.', children: [
-            { id: 'af.maghreb', icon: '🕌', title: 'Maghreb', desc: 'Voyager au Maroc, en Algérie ou en Tunisie.' },
-            { id: 'af.sahara', icon: '🐪', title: 'Sahara', desc: 'Traverser ou dormir dans le Sahara.', type: 'goal' },
-            { id: 'af.west', icon: '🥁', title: 'Afrique de l\'Ouest', desc: 'Voyager en Afrique de l\'Ouest.', type: 'goal' },
-            { id: 'af.east', icon: '🦒', title: 'Afrique de l\'Est', desc: 'Voyager en Afrique de l\'Est (Kenya, Tanzanie, Éthiopie…).', type: 'goal' },
-            { id: 'af.south', icon: '🐘', title: 'Afrique australe', desc: 'Voyager en Afrique australe.', type: 'goal' },
-          ] },
-          { id: 'as.root', hub: true, icon: '🐉', title: 'Asie', desc: 'Voyager en Asie.', children: [
-            { id: 'as.central', icon: '🐎', title: 'Asie centrale', desc: 'Parcourir les routes de la Soie : Ouzbékistan, Kirghizstan, Kazakhstan…', type: 'goal', children: [
-              { id: 'as.mongolia', icon: '🏇', title: 'Steppes', desc: 'Voyager en Mongolie.', type: 'challenge' },
-            ] },
-            { id: 'as.india', icon: '🕉️', title: 'Sous-continent', desc: 'Voyager en Inde ou au Népal.', type: 'goal' },
-            { id: 'as.china', icon: '🏯', title: 'Chine', desc: 'Voyager en Chine.', type: 'goal' },
-            { id: 'as.japan', icon: '🗾', title: 'Japon', desc: 'Voyager au Japon.', type: 'goal' },
-            { id: 'as.southeast', icon: '🛕', title: 'Asie du Sud-Est', desc: 'Parcourir l\'Asie du Sud-Est : Thaïlande, Vietnam, Indonésie, Philippines…', type: 'goal' },
-          ] },
-          { id: 'am.root', hub: true, icon: '🌎', title: 'Amériques', desc: 'Voyager sur le continent américain.', children: [
-            { id: 'am.north', icon: '🗽', title: 'Amérique du Nord', desc: 'Voyager aux États-Unis ou au Canada.', type: 'goal' },
-            { id: 'am.central', icon: '🌮', title: 'Amérique centrale', desc: 'Parcourir le Mexique et l\'Amérique centrale.', type: 'goal' },
-            { id: 'am.south', icon: '🦙', title: 'Amérique du Sud', desc: 'Parcourir l\'Amérique du Sud.', type: 'goal', children: [
-              { id: 'am.patagonia', icon: '🐧', title: 'Patagonie', desc: 'Aller au bout du monde, en Patagonie.', type: 'challenge' },
-            ] },
-          ] },
-          { id: 'oc.root', hub: true, icon: '🦘', title: 'Océanie', desc: 'Voyager en Australie ou en Nouvelle-Zélande.', type: 'goal', children: [
-            { id: 'oc.pacific', icon: '🌺', title: 'Îles du Pacifique', desc: 'Voyager dans les îles du Pacifique.', type: 'challenge' },
-          ] },
-          { id: 'po.root', hub: true, icon: '🧊', title: 'Pôles', desc: 'Passer le cercle polaire.', type: 'goal', children: [
-            { id: 'po.antarctica', icon: '🐧', title: 'Antarctique', desc: 'Poser le pied en Antarctique.', type: 'challenge' },
-          ] },
+        // ---------- Horizons : des expériences, pas des lieux (les lieux se cochent sur la carte) ----------
+        { id: 'av.country', icon: '🛂', title: 'Horizons', desc: 'Partir à l\'étranger pour la première fois.', children: [
           { id: 'av.solo', icon: '🧍', title: 'En solo', desc: 'Voyager seul au moins une semaine.', type: 'goal' },
+          { id: 'vx.overland', icon: '🛤️', title: 'Sans avion', desc: 'Traverser un continent uniquement par voie terrestre.', type: 'goal', children: [
+            { id: 'eu.transsib', icon: '🚂', title: 'Transsibérien', desc: 'Traverser la Russie par le Transsibérien.', type: 'challenge' },
+            { id: 'vx.noplane', icon: '🌍', title: 'Terre à terre', desc: 'Un an de voyages sans prendre l\'avion.', type: 'challenge' },
+          ] },
+          { id: 'vx.live', icon: '🏠', title: 'Expatrié', desc: 'Vivre au moins 3 mois dans un pays étranger.', type: 'goal', children: [
+            { id: 'vx.work', icon: '💼', title: 'Travail à l\'étranger', desc: 'Travailler à l\'étranger.', type: 'goal' },
+          ] },
+          { id: 'vx.nighttrain', icon: '🚆', title: 'Train de nuit', desc: 'Voyager en train de nuit.' },
+          { id: 'vx.walkborder', icon: '🚶', title: 'À pied', desc: 'Passer une frontière à pied.' },
+          { id: 'vx.zero', icon: '🆓', title: 'Zéro euro', desc: 'Une journée entière de voyage sans dépenser un centime.' },
+          { id: 'vx.nogps', icon: '🧭', title: 'Sans GPS', desc: 'Voyager une journée sans téléphone ni carte, en demandant ton chemin.', type: 'goal' },
+          { id: 'vx.fest', icon: '🎆', title: 'Fête locale', desc: 'Vivre une fête traditionnelle dans un pays étranger.' },
+          { id: 'vx.midnight', icon: '🌞', title: 'Soleil de minuit', desc: 'Voir le soleil de minuit au-delà du cercle polaire.', type: 'goal' },
+          { id: 'vx.desert', icon: '🐪', title: 'Nuit dans le désert', desc: 'Dormir dans un désert.', type: 'goal' },
+          { id: 'vx.equator', icon: '🧵', title: 'Équateur', desc: 'Passer l\'équateur par voie terrestre ou maritime.', type: 'challenge' },
+          { id: 'vx.bike', icon: '🚲', title: 'Cyclotourisme', desc: 'Un voyage de plusieurs jours à vélo, en autonomie.', type: 'goal' },
         ] },
 
         // ---------- Hospitalité ----------
@@ -412,22 +384,106 @@ window.DEFAULT_TABS = [
     tree: {
       id: 'cr.music', icon: '🎸', title: 'Mélomane', desc: 'Commencer un instrument.',
       children: [
-        { id: 'cr.song', icon: '🎶', title: 'Un morceau entier', desc: 'Jouer un morceau en entier sans te tromper.', type: 'goal', children: [
-          { id: 'cr.live', icon: '🎤', title: 'Sur scène', desc: 'Jouer devant un public.', type: 'goal', children: [
-            { id: 'mu.concert', icon: '🎟️', title: 'Concert', desc: 'Donner un concert d\'une heure.', type: 'challenge' },
+        // ---------- Partage ----------
+        { id: 'mu.stage', icon: '🤝', title: 'Partage', desc: 'Faire de la musique avec d\'autres.', children: [
+          { id: 'cr.song', icon: '🎶', title: 'Un morceau entier', desc: 'Jouer un morceau en entier sans te tromper.', type: 'goal', children: [
+            { id: 'cr.live', icon: '🎤', title: 'Sur scène', desc: 'Jouer devant un public.', type: 'goal', children: [
+              { id: 'mu.concert', icon: '🎟️', title: 'Concert', desc: 'Donner un concert d\'une heure.', type: 'challenge' },
+            ] },
+            { id: 'mu.record', icon: '🎙️', title: 'Enregistré', desc: 'Enregistrer un morceau proprement.', type: 'goal', children: [
+              { id: 'mu.ep', icon: '💿', title: 'EP', desc: 'Sortir un EP (au moins 4 morceaux).', type: 'challenge' },
+            ] },
           ] },
-          { id: 'mu.record', icon: '🎙️', title: 'Enregistré', desc: 'Enregistrer un morceau proprement.', type: 'goal', children: [
-            { id: 'mu.ep', icon: '💿', title: 'EP', desc: 'Sortir un EP (au moins 4 morceaux).', type: 'challenge' },
+          { id: 'mu.share', icon: '🌍', title: 'Langage universel', desc: 'Faire de la musique avec des gens rencontrés en voyage.', type: 'goal' },
+          { id: 'cr.compose', icon: '✍️', title: 'Compositeur', desc: 'Composer un morceau original.', type: 'goal' },
+        ] },
+
+        // ---------- Guitare ----------
+        { id: 'gu.root', icon: '🎸', title: 'Guitare', desc: 'Jouer tes premiers accords ouverts à la guitare.', children: [
+          { id: 'gu.barre', icon: '✋', title: 'Accords barrés', desc: 'Enchaîner des accords barrés proprement (Fa, Si mineur…).', children: [
+            { id: 'gu.caged', icon: '🗺️', title: 'Tout le manche', desc: 'Retrouver n\'importe quel accord partout sur le manche (système CAGED).', type: 'goal', children: [
+              { id: 'gu.jazz', icon: '🎷', title: 'Accords jazz', desc: 'Jouer des grilles en accords de 7e, 9e et 13e.', type: 'challenge' },
+            ] },
+          ] },
+          { id: 'gu.rhythm', icon: '🥁', title: 'Rythmique', desc: 'Tenir une rythmique au métronome sans décrocher.', children: [
+            { id: 'gu.funk', icon: '🕺', title: 'Rythmique funk', desc: 'Une rythmique funk en doubles croches avec ghost notes.', type: 'goal' },
+          ] },
+          { id: 'gu.picking', icon: '🤏', title: 'Picking', desc: 'Jouer un morceau en arpèges aux doigts.', type: 'goal', children: [
+            { id: 'gu.travis', icon: '🤠', title: 'Travis picking', desc: 'Basse alternée au pouce + mélodie aux doigts.', type: 'goal' },
+          ] },
+          { id: 'gu.solo', icon: '🔥', title: 'Premier solo', desc: 'Improviser sur un blues avec la pentatonique.', type: 'goal', children: [
+            { id: 'gu.impro', icon: '🌀', title: 'Improvisateur', desc: 'Improviser sur une grille en suivant les accords (modes, notes cibles).', type: 'challenge' },
           ] },
         ] },
-        { id: 'mu.sing', icon: '🎤', title: 'Guitare-voix', desc: 'Chanter un morceau entier en t\'accompagnant.', children: [
+
+        // ---------- Piano ----------
+        { id: 'mu.instr2', icon: '🎹', title: 'Piano', desc: 'Jouer de ton deuxième instrument : le piano.', children: [
+          { id: 'pi.chords', icon: '🎵', title: 'Accompagnateur', desc: 'Accompagner une chanson aux accords au piano.' },
+          { id: 'mu.piano', icon: '🙌', title: 'Deux mains', desc: 'Jouer un morceau entier au piano, à deux mains.', type: 'goal', children: [
+            { id: 'pi.read', icon: '📄', title: 'Déchiffreur', desc: 'Déchiffrer une partition simple à deux mains.', type: 'goal', children: [
+              { id: 'pi.classic', icon: '🎼', title: 'Pièce classique', desc: 'Jouer une pièce classique de niveau fin de 1er cycle de conservatoire.', type: 'challenge' },
+            ] },
+          ] },
+        ] },
+
+        // ---------- Chant ----------
+        { id: 'mu.sing', icon: '🎤', title: 'Chant', desc: 'Chanter un morceau entier en t\'accompagnant.', children: [
+          { id: 'ch.pitch', icon: '🎯', title: 'Juste', desc: 'Chanter une gamme a cappella sans dévier.' },
           { id: 'mu.duo', icon: '🎼', title: 'Harmonies', desc: 'Chanter ou jouer à deux voix en harmonie.', type: 'goal' },
-          { id: 'mu.voice', icon: '🗣️', title: 'Voix posée', desc: 'Prendre des cours de chant / travailler ta voix sur plusieurs mois.', type: 'goal' },
+          { id: 'mu.voice', icon: '🗣️', title: 'Voix posée', desc: 'Travailler ta voix plusieurs mois (cours, exercices).', type: 'goal', children: [
+            { id: 'ch.range', icon: '📶', title: 'Deux octaves', desc: 'Chanter confortablement sur deux octaves.', type: 'challenge' },
+            { id: 'ch.mix', icon: '💥', title: 'Voix mixte', desc: 'Maîtriser la voix mixte / le belting sans forcer.', type: 'challenge' },
+          ] },
         ] },
-        { id: 'mu.share', icon: '🌍', title: 'Langage universel', desc: 'Faire de la musique avec des gens rencontrés en voyage.', type: 'goal' },
-        { id: 'cr.compose', icon: '✍️', title: 'Compositeur', desc: 'Composer un morceau original.', type: 'goal' },
-        { id: 'mu.instr2', icon: '🎹', title: 'Multi-instrumentiste', desc: 'Jouer d\'un deuxième instrument (piano…).', type: 'goal', children: [
-          { id: 'mu.piano', icon: '🎹', title: 'Pianiste', desc: 'Jouer un morceau entier au piano, à deux mains.', type: 'goal' },
+
+        // ---------- Théorie : du débutant au pro (repères : grades 1 à 8 ABRSM) ----------
+        { id: 'th.root', icon: '📖', title: 'Théorie', desc: 'Débutant : connaître le nom des notes, les tons et les demi-tons.', children: [
+          // lecture
+          { id: 'th.staff', icon: '🎼', title: 'Clé de sol', desc: 'Débutant : lire les notes en clé de sol.', children: [
+            { id: 'th.bass', icon: '🔑', title: 'Clé de fa', desc: 'Débutant : lire les notes en clé de fa.', children: [
+              { id: 'th.sight', icon: '👀', title: 'Lecture à vue', desc: 'Intermédiaire : déchiffrer une mélodie simple à vue.', type: 'goal', children: [
+                { id: 'th.transpose', icon: '🔀', title: 'Transposition', desc: 'Avancé : clés d\'ut et transposition des instruments (sib, fa, mib).', type: 'challenge' },
+              ] },
+            ] },
+          ] },
+          // rythme
+          { id: 'th.rhythm', icon: '⏱️', title: 'Rythmes', desc: 'Débutant : lire rondes, blanches, noires, croches, doubles croches et silences.', children: [
+            { id: 'th.compound', icon: '🌊', title: 'Mesures composées', desc: 'Intermédiaire : mesures composées et irrégulières (6/8, 7/8, 5/4).', type: 'goal', children: [
+              { id: 'th.poly', icon: '🔁', title: 'Polyrythmies', desc: 'Avancé : jouer et lire des polyrythmies (3 contre 2, 4 contre 3).', type: 'challenge' },
+            ] },
+          ] },
+          // gammes
+          { id: 'th.major', icon: '🎹', title: 'Gamme majeure', desc: 'Débutant : construire les gammes majeures, armures et cycle des quintes.', children: [
+            { id: 'th.minor', icon: '🌙', title: 'Gammes mineures', desc: 'Intermédiaire : mineures naturelle, harmonique et mélodique.', type: 'goal', children: [
+              { id: 'th.modes', icon: '🎨', title: 'Les 7 modes', desc: 'Intermédiaire : ionien, dorien, phrygien, lydien, mixolydien, éolien, locrien.', type: 'goal', children: [
+                { id: 'th.exotic', icon: '🐍', title: 'Gammes exotiques', desc: 'Avancé : gammes par tons, diminuée, altérée, harmoniques des musiques du monde.', type: 'challenge' },
+              ] },
+            ] },
+          ] },
+          // harmonie
+          { id: 'th.triads', icon: '🔺', title: 'Accords parfaits', desc: 'Débutant : construire les accords majeurs, mineurs, diminués et augmentés.', children: [
+            { id: 'th.degrees', icon: '🪜', title: 'Degrés', desc: 'Intermédiaire : harmoniser une gamme (I à VII) et reconnaître les grilles courantes.', type: 'goal', children: [
+              { id: 'th.sevenths', icon: '7️⃣', title: 'Accords de 7e', desc: 'Intermédiaire : accords de 7e et leurs renversements.', type: 'goal', children: [
+                { id: 'th.cadences', icon: '🏁', title: 'Cadences', desc: 'Avancé : cadences et fonctions tonique / sous-dominante / dominante.', type: 'goal', children: [
+                  { id: 'th.chromatic', icon: '🌈', title: 'Harmonie chromatique', desc: 'Avancé : dominantes secondaires, sixte napolitaine, sixtes augmentées, modulations.', type: 'challenge', children: [
+                    { id: 'th.jazz', icon: '🎷', title: 'Harmonie jazz', desc: 'Pro : ii-V-I dans les 12 tonalités, substitution tritonique, réharmonisation.', type: 'challenge' },
+                  ] },
+                  { id: 'th.counter', icon: '⛪', title: 'Choral à 4 voix', desc: 'Pro : écrire un choral à 4 voix et du contrepoint dans le style de Bach.', type: 'challenge', children: [
+                    { id: 'th.arrange', icon: '🎻', title: 'Arrangeur', desc: 'Pro : arranger un morceau pour un ensemble (quatuor, cuivres, big band).', type: 'challenge' },
+                  ] },
+                  { id: 'th.analysis', icon: '🔬', title: 'Analyse', desc: 'Pro : analyser la forme et l\'harmonie d\'une œuvre (sonate, fugue, standard).', type: 'challenge' },
+                ] },
+              ] },
+            ] },
+          ] },
+          // oreille
+          { id: 'th.intervals', icon: '👂', title: 'Intervalles', desc: 'Intermédiaire : reconnaître les intervalles à l\'oreille.', type: 'goal', children: [
+            { id: 'th.chordear', icon: '🎧', title: 'Oreille harmonique', desc: 'Intermédiaire : reconnaître accords et grilles à l\'oreille.', type: 'goal', children: [
+              { id: 'th.transcribe', icon: '📝', title: 'Relevé', desc: 'Avancé : relever un morceau entier à l\'oreille (mélodie + accords).', type: 'challenge', children: [
+                { id: 'th.dictation', icon: '🎓', title: 'Dictée à deux voix', desc: 'Pro : dictée musicale à deux voix.', type: 'challenge' },
+              ] },
+            ] },
+          ] },
         ] },
       ],
     },

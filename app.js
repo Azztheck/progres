@@ -3,6 +3,7 @@
 const KEY = 'progres.v1';
 const S = 52, COLW = 118, ROWH = 82;
 const XP = { task: 10, goal: 25, challenge: 50 };
+const XP_COUNTRY = 5;
 // Thème : l'habillage (CSS dans themes.css) + le vocabulaire qui va avec.
 // Un seul pour l'instant, mais la structure permet d'en rajouter.
 const THEMES = {
@@ -29,6 +30,7 @@ function blank() {
     progress: {},   // id -> nombre
     notes: {},      // id -> texte
     hidden: {},     // id -> true (branche "pas pour moi")
+    countries: {},  // code ISO du pays -> date de première visite (carte du monde)
     custom: [],     // nœuds perso { id, tab, parent, icon, title, desc, type, target, unit }
     customTabs: [{ id: 'mes', title: 'Mes quêtes', icon: '⭐', color: '#8a5cff', root: 'mes.root' }],
     unverified: {}, // id -> true : pré-rempli, pas encore confirmé
@@ -64,6 +66,8 @@ function build() {
     tabs.push({ id: t.id, title: t.title, icon: t.icon, color: t.color, root: t.tree.id });
     walk(t.tree, null, t.id);
   }
+  if (window.WORLD) tabs.splice(tabs.findIndex(t => t.id === 'aventure') + 1, 0,
+    { id: 'carte', title: 'Carte', icon: '🗺️', color: '#2a6f9a', map: true });
   for (const t of st.customTabs) tabs.push({ ...t, custom: true });
   for (const c of st.custom) nodes[c.id] = { type: 'task', target: 0, unit: '', desc: '', ...c, custom: true, children: [] };
   for (const c of st.custom) if (nodes[c.parent]) nodes[c.parent].children.push(c.id);
@@ -81,6 +85,7 @@ function applyPreset() {
   }
   for (const [id, v] of Object.entries(P.progress || {})) if (nodes[id]) st.progress[id] = Math.max(st.progress[id] || 0, v);
   for (const [id, t] of Object.entries(P.notes || {})) if (nodes[id] && !st.notes[id]) st.notes[id] = t;
+  for (const [cc, d] of Object.entries(P.countries || {})) if (!st.countries[cc]) st.countries[cc] = d;
   // ce que tu as confirmé entre-temps n'est plus « à vérifier »
   for (const id of P.verified || []) delete st.unverified[id];
   st.preset = P.version;
@@ -100,6 +105,7 @@ const tabNodes = tabId => Object.values(nodes).filter(n => n.tab === tabId && !i
 function totalXP() {
   let xp = 0;
   for (const id in st.done) if (nodes[id]) xp += XP[nodes[id].type] || 0;
+  xp += visitedStats().n * XP_COUNTRY;
   return xp;
 }
 function levelOf(xp) { // chaque niveau coûte un peu plus que le précédent
@@ -134,19 +140,77 @@ function renderXP() {
   $('#xptext').textContent = `${xp} ${T().xp} · ${done}/${all.length} débloqués`;
 }
 
+function tabProgress(t) {
+  if (t.map) { const v = visitedStats(); return { d: v.n, n: window.WORLD.countries.length, pct: v.pct }; }
+  const ns = tabNodes(t.id), d = ns.filter(n => st.done[n.id]).length;
+  return { d, n: ns.length, pct: ns.length ? Math.round(d / ns.length * 100) : 0 };
+}
+
 function renderTabs() {
   $('#tabs').innerHTML = tabs.map(t => {
-    const ns = tabNodes(t.id), d = ns.filter(n => st.done[n.id]).length;
-    const pct = ns.length ? Math.round(d / ns.length * 100) : 0;
+    const { pct } = tabProgress(t);
     return `<div class="tab ${t.id === st.tab ? 'active' : ''}" data-tab="${esc(t.id)}" style="--c:${esc(t.color)}" title="${esc(t.title)} — ${pct}%">
       <span class="t-ic">${esc(t.icon)}</span><span class="t-name">${esc(t.title)}</span><span class="t-pct"><i style="width:${pct}%"></i></span></div>`;
   }).join('');
 }
 
 let pos = {};
+// ---------- Carte du monde ----------
+const CC = window.WORLD ? Object.fromEntries(window.WORLD.countries.map(c => [c.id, c])) : {};
+function visitedStats() {
+  if (!window.WORLD) return { n: 0, conts: 0, pct: 0 };
+  const ids = Object.keys(st.countries).filter(id => CC[id]);
+  return { n: ids.length, conts: new Set(ids.map(id => CC[id].cont)).size, pct: Math.round(ids.length / window.WORLD.countries.length * 100) };
+}
+function renderMap(t) {
+  const W = window.WORLD, v = visitedStats();
+  pos = {};
+  const svg = $('#links');
+  svg.innerHTML = ''; svg.setAttribute('width', 0); svg.setAttribute('height', 0);
+  $('#nodes').innerHTML = `<svg class="world" width="${W.w}" height="${W.h}" viewBox="0 0 ${W.w} ${W.h}"><path class="sphere" d="${W.sphere}"/>` +
+    W.countries.filter(c => c.d).map(c => `<path class="c${st.countries[c.id] ? ' v' : ''}" data-cc="${c.id}" d="${c.d}"/>`).join('') + '</svg>';
+  $('#tabinfo').innerHTML = `<b>${esc(t.icon)} Carte du monde</b>${v.n} pays · ${v.conts} continent${v.conts > 1 ? 's' : ''} · ${v.pct} % du monde`;
+  applyView();
+}
+function toggleCountry(cc) {
+  const c = CC[cc]; if (!c) return;
+  if (st.countries[cc]) {
+    if (!confirm(`Retirer ${c.name} de ta carte ?`)) return;
+    delete st.countries[cc]; save(); render(); return;
+  }
+  const conts = new Set(Object.keys(st.countries).map(id => CC[id]?.cont));
+  st.countries[cc] = today(); save(); render();
+  toast({ icon: '📍', type: 'task', title: c.name }, 'Nouvelle terre foulée');
+  if (!conts.has(c.cont)) setTimeout(() => toast({ icon: '🌍', type: 'challenge', title: window.WORLD.continents[c.cont] }, 'Nouveau continent'), 700);
+}
+function openCountryList() {
+  const W = window.WORLD, v = visitedStats();
+  const norm = x => x.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const groups = Object.entries(W.continents).map(([k, name]) => {
+    const cs = W.countries.filter(c => c.cont === k);
+    return `<h3>${esc(name)} <span class="muted">${cs.filter(c => st.countries[c.id]).length}/${cs.length}</span></h3><div class="clist">` +
+      cs.map(c => `<label data-name="${esc(norm(c.name))}"><input type="checkbox" data-cc="${c.id}" ${st.countries[c.id] ? 'checked' : ''}> ${esc(c.name)}</label>`).join('') + '</div>';
+  }).join('');
+  show(`<div class="head"><h2>🗺️ Pays visités</h2><button type="button" class="mc x" data-close>✕</button></div>
+    <p class="muted">${v.n} pays · ${v.conts} continents · ${v.pct} % du monde. Les pays trop petits pour la carte sont ici aussi.</p>
+    <input type="text" id="f-search" placeholder="Chercher un pays…">${groups}`, m => {
+    const search = m.querySelector('#f-search');
+    search.oninput = () => {
+      const q = norm(search.value);
+      m.querySelectorAll('.clist label').forEach(l => { l.hidden = !!q && !l.dataset.name.includes(q); });
+    };
+    m.querySelectorAll('input[data-cc]').forEach(cb => cb.onchange = () => {
+      if (cb.checked) st.countries[cb.dataset.cc] = today(); else delete st.countries[cb.dataset.cc];
+      save(); render();
+    });
+  });
+}
+
 function renderTree() {
   const t = tabOf(st.tab);
   document.documentElement.style.setProperty('--tab', t.color);
+  $('#btn-list').hidden = !t.map;
+  if (t.map) return renderMap(t);
   pos = {};
   let row = 0;
   const lay = (id, d) => {
@@ -211,6 +275,13 @@ function applyView() {
 }
 function centerView() {
   const stage = $('#stage'), W = stage.clientWidth, H = stage.clientHeight - 60; // 60 : place pour l'info en bas
+  if (tabOf(st.tab).map) {
+    const M = window.WORLD;
+    view.s = Math.min((W - 20) / M.w, H / M.h);
+    view.x = (W - M.w * view.s) / 2;
+    view.y = Math.max(10, (H - M.h * view.s) / 2);
+    return applyView();
+  }
   const h = Math.max(...Object.values(pos).map(p => p.y)) + S + 14;
   const w = Math.max(...Object.values(pos).map(p => p.x)) + S;
   // on ne dézoome pas en dessous d'un seuil lisible : un grand arbre se parcourt en glissant
@@ -221,7 +292,7 @@ function centerView() {
   applyView();
 }
 function zoomAt(f, cx, cy) {
-  const s = Math.max(.3, Math.min(2.5, view.s * f));
+  const s = Math.max(.15, Math.min(6, view.s * f)); // jusqu'à ×6 pour les petits pays de la carte
   view.x = cx - (cx - view.x) * (s / view.s);
   view.y = cy - (cy - view.y) * (s / view.s);
   view.s = s;
@@ -263,6 +334,10 @@ function zoomAt(f, cx, cy) {
       if (moved <= 6) {
         const el = document.elementFromPoint(e.clientX, e.clientY)?.closest('#nodes .node');
         if (el) openNode(el.dataset.id);
+        else {
+          const c = document.elementFromPoint(e.clientX, e.clientY)?.closest('#nodes [data-cc]');
+          if (c) toggleCountry(c.dataset.cc);
+        }
       }
     }
     if (ptrs.size === 1) last = [...ptrs.values()][0];
@@ -285,6 +360,16 @@ function zoomAt(f, cx, cy) {
 const hover = $('#hover');
 function hideHover() { hover.style.display = 'none'; }
 $('#nodes').addEventListener('mouseover', e => {
+  const ce = e.target.closest('[data-cc]');
+  if (ce && !$('#stage').classList.contains('dragging')) {
+    const c = CC[ce.dataset.cc], d = st.countries[c.id];
+    hover.className = d ? 'done' : '';
+    hover.innerHTML = `<div class="h-title">${esc(c.name)}</div><div class="h-desc">${esc(window.WORLD.continents[c.cont])}${d ? `<small>Visité · noté le ${fmtDate(d)}</small>` : '<small>Clique pour le cocher</small>'}</div>`;
+    hover.style.display = 'block';
+    hover.style.left = Math.min(e.clientX + 14, innerWidth - hover.offsetWidth - 8) + 'px';
+    hover.style.top = Math.min(e.clientY + 14, innerHeight - hover.offsetHeight - 8) + 'px';
+    return;
+  }
   const el = e.target.closest('.node'); if (!el || $('#stage').classList.contains('dragging')) return;
   const n = nodes[el.dataset.id], done = st.done[n.id];
   let extra = '';
@@ -298,7 +383,7 @@ $('#nodes').addEventListener('mouseover', e => {
   hover.style.left = left + 'px';
   hover.style.top = Math.min(r.top, window.innerHeight - hover.offsetHeight - 8) + 'px';
 });
-$('#nodes').addEventListener('mouseout', e => { if (e.target.closest('.node')) hideHover(); });
+$('#nodes').addEventListener('mouseout', e => { if (e.target.closest('.node, [data-cc]')) hideHover(); });
 
 // ---------- Actions ----------
 function setDone(id, on) {
@@ -545,8 +630,8 @@ function openMenu() {
   const journal = Object.entries(st.done).filter(([id]) => nodes[id])
     .sort((a, b) => b[1].localeCompare(a[1])).slice(0, 50);
   const stats = tabs.map(t => {
-    const ns = tabNodes(t.id), d = ns.filter(n => st.done[n.id]).length;
-    return `<div class="stat">${esc(t.icon)} <span style="width:110px">${esc(t.title)}</span><div class="bigbar"><i style="width:${ns.length ? d / ns.length * 100 : 0}%"></i></div><span>${d}/${ns.length}</span></div>`;
+    const { d, n, pct } = tabProgress(t);
+    return `<div class="stat">${esc(t.icon)} <span style="width:110px">${esc(t.title)}</span><div class="bigbar"><i style="width:${pct}%"></i></div><span>${d}/${n}</span></div>`;
   }).join('');
   const tv = toVerify();
   show(`
@@ -634,6 +719,7 @@ $('#tabs').addEventListener('click', e => {
   st.tab = el.dataset.tab; save(); render(); centerView();
 });
 $('#btn-menu').onclick = openMenu;
+$('#btn-list').onclick = openCountryList;
 $('#btn-new-tab').onclick = openTabForm;
 window.addEventListener('resize', () => centerView());
 
